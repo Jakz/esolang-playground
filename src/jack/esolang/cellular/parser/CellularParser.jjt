@@ -4,6 +4,9 @@
   MULTI = true;  static = true;}PARSER_BEGIN(eg2)package jack.esolang.cellular.parser;
 
 import jack.esolang.cellular.*;
+import jack.esolang.cellular.rules.*;
+import jack.esolang.cellular.rules.terms.*;
+import jack.esolang.cellular.rules.terms.Number;
 import java.awt.Color;
 
 public class eg2{  public static void main(String args [])  {    System.out.println("Reading from standard input...");    System.out.print("Enter an expression like \"1+(2+3)*var;\" :");    new eg2(System.in);    try    {      GFXSpec n = eg2.Start();
@@ -15,7 +18,7 @@ public class eg2{  public static void main(String args [])  {    System.out.
 | < NEIGHBORS: "neighbors" >
 | < TRUE: "true" >
 | < FALSE: "false" >}TOKEN : /* IDENTIFIERS */{  <CHARACTER :  (< LETTER >| < DIGIT >) >
-| <IDENTIFIER : <LETTER> (<LETTER>|<DIGIT>)* >| < #LETTER : [ "_", "a"-"z", "A"-"Z" ] >| < #DIGIT : [ "0"-"9" ] >}GFXSpec Start() :{GFXSpec g;}{  g=GFXSpec()  {    return g;  }}void Expression() :{}{  AdditiveExpression()}void AdditiveExpression() :{}{  MultiplicativeExpression()  (    (      "+"    | "-"    )    MultiplicativeExpression()  )*}void MultiplicativeExpression() :{}{  UnaryExpression()  (    (      "*"    | "/"    | "%"    )    UnaryExpression()  )*}void UnaryExpression() :{}{  "(" Expression() ")"| Identifier()| Integer()}void Identifier() :{}{  < IDENTIFIER >}int Integer() :{ Token n; }{  n=< INTEGER_LITERAL > { return Integer.parseInt(n.image); }}
+| <IDENTIFIER : <LETTER> (<LETTER>|<DIGIT>)* >| < #LETTER : [ "_", "a"-"z", "A"-"Z" ] >| < #DIGIT : [ "0"-"9" ] >}GFXSpec Start() :{GFXSpec g;}{  g=GFXSpec()  {    return g;  }}void Expression() :{}{  AdditiveExpression()}void AdditiveExpression() :{}{  MultiplicativeExpression()  (    (      "+"    | "-"    )    MultiplicativeExpression()  )*}void MultiplicativeExpression() :{}{  UnaryExpression()  (    (      "*"    | "/"    | "%"    )    UnaryExpression()  )*}void UnaryExpression() :{}{  "(" Expression() ")"| Identifier()| Integer()}String Identifier() :{ Token s; }{  s=< IDENTIFIER > { return s.image; }}int Integer() :{ Token n; }{  n=< INTEGER_LITERAL > { return Integer.parseInt(n.image); }}
 
 void Type() : {}
 {  < TYPE > Identifier() "{" GFXSpec() < RULES > "{" Rules() "}" "}"
@@ -29,8 +32,8 @@ void Rule() : {}
 {  < BECOMES > Identifier() < WHEN > BCondition() ";"
 }
 
-void NeighborCount() : {}
-{  < NEIGHBORS > "(" Identifier() ")"
+Term<Integer> NeighborCount() : { String s; }
+{  < NEIGHBORS > "(" s=Identifier() ")" { return new NeighborCountTerm(new TypePlaceholder(s)); }    
 }
 
 void BConditionOp() : {}
@@ -47,17 +50,22 @@ void UCondition() : {}
 | < TRUE >
 | < FALSE >
 }
-void ComparisonOp() : {}
-{  "==" | "!=" | ">=" | "<=" | ">" | "<"
+ComparisonCondition.Op ComparisonOp() : {}
+{  "==" { return ComparisonCondition.Op.EQ; }
+| "!=" { return ComparisonCondition.Op.NEQ; }
+| ">=" { return ComparisonCondition.Op.GEQ; }
+| "<=" { return ComparisonCondition.Op.LEQ; }
+| ">" { return ComparisonCondition.Op.GRE; }
+| "<" { return ComparisonCondition.Op.LES; }
 }
 
-void Comparison() : {}
-{  Expr() ComparisonOp() Expr()
+ComparisonCondition Comparison() : { Term<?> t1, t2; ComparisonCondition.Op op; }
+{  t1=Expr() op=ComparisonOp() t2=Expr()  {    return new ComparisonCondition(t1,t2,op);
+  }
 }
 
-void Expr() : {}
-{  NeighborCount()
-| Integer()
+Term<Integer> Expr() : {Term<Integer> t; Integer i;}
+{   t=NeighborCount() { return t; }|  i=Integer() { return new Number(i); }
 }
 GFXSpec GFXSpec() : { char s = ' '; Color f = null, b = null; }
 { 

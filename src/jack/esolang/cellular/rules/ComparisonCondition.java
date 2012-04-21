@@ -38,4 +38,10 @@ public class ComparisonCondition<T extends Comparable<? super T>> implements Con
 			default: return false;
 		}
 	}
+	
+	public void solveReferences()
+	{
+		t1.solveReferences();
+		t2.solveReferences();
+	}
 }

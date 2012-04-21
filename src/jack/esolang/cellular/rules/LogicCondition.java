@@ -41,4 +41,10 @@ public class LogicCondition implements Condition
 			default: return false;
 		}
 	}
+	
+	public void solveReferences()
+	{
+		for (Condition c : conds)
+			c.solveReferences();
+	}
 }

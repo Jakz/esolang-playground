@@ -15,4 +15,12 @@ public class TypeTerm implements Term<Type>
 	{
 		return type;
 	}
+	
+	public void solveReferences()
+	{
+		if (type instanceof TypePlaceholder)
+		{
+			this.type = Automaton.current().getType(type.name);
+		}
+	}
 }

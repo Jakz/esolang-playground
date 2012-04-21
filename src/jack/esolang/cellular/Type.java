@@ -5,11 +5,16 @@ import java.util.*;
 
 public class Type implements Comparable<Type>
 {
-	public final String name;
-	public final GFXSpec template;
+	public String name;
+	public GFXSpec template;
 	
 	ArrayList<Rule> rules;
 	ArrayList<Category> categories;
+	
+	Type()
+	{
+		
+	}
 	
 	Type(String name, GFXSpec template)
 	{

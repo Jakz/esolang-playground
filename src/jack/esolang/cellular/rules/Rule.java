@@ -23,4 +23,9 @@ public class Rule
 		
 		return false;
 	}
+	
+	public void solveReferences()
+	{
+		condition.solveReferences();
+	}
 }

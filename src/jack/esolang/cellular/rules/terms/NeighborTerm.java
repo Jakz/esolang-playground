@@ -17,4 +17,6 @@ public class NeighborTerm implements Term<Type>
 		
 		return c.type;
 	}
+	
+	public void solveReferences() {}
 }

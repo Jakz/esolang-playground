@@ -15,4 +15,6 @@ public class Number implements Term<Integer>
 	{
 		return i;
 	}
+	
+	public void solveReferences() {}
 }

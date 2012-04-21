@@ -25,4 +25,12 @@ public class NeighborCountTerm implements Term<Integer>
 		
 		return c;
 	}
+	
+	public void solveReferences()
+	{
+		if (type instanceof TypePlaceholder)
+		{
+			this.type = Automaton.current().getType(type.name);
+		}
+	}
 }
