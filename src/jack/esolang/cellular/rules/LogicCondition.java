@@ -10,12 +10,11 @@ public class LogicCondition implements Condition
 	}
 	
 	Op op;
-	Condition c1, c2;
+	Condition[] conds;
 	
-	public LogicCondition(Condition c1, Condition c2, Op op)
+	public LogicCondition(Op op, Condition... conds)
 	{
-		this.c1 = c1;
-		this.c2 = c2;
+		this.conds = conds;
 		this.op = op;
 	}
 	
@@ -23,8 +22,22 @@ public class LogicCondition implements Condition
 	{
 		switch (op)
 		{
-			case AND: return c1.evaluate(cell) && c2.evaluate(cell);
-			case OR: return c1.evaluate(cell) || c2.evaluate(cell);
+			case AND:
+			{
+				for (Condition c : conds)
+					if (!c.evaluate(cell))
+						return false;
+				
+				return true;
+			}
+			case OR:
+			{
+				for (Condition c : conds)
+					if (c.evaluate(cell))
+						return true;
+				
+				return false;
+			}
 			default: return false;
 		}
 	}

@@ -3,7 +3,7 @@ package jack.esolang.cellular;
 import jack.esolang.cellular.rules.*;
 import java.util.*;
 
-public class Type
+public class Type implements Comparable<Type>
 {
 	public final String name;
 	public final GFXTemplate template;
@@ -33,5 +33,10 @@ public class Type
 		}
 		
 		cell.nextType = cell.type;
+	}
+	
+	public int compareTo(Type other)
+	{
+		return name.compareTo(name);
 	}
 }

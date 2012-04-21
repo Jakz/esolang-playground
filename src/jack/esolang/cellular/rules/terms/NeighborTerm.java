@@ -2,27 +2,19 @@ package jack.esolang.cellular.rules.terms;
 
 import jack.esolang.cellular.*;
 
-public class NeighborTerm implements Term<Integer>
+public class NeighborTerm implements Term<Type>
 {
-	Type type;
+	int dir;
 	
-	public NeighborTerm(Type type)
+	public NeighborTerm(int dir)
 	{
-		this.type = type;
+		this.dir = dir;
 	}
 	
-	public Integer getValue(Cell cell)
+	public Type getValue(Cell cell)
 	{
-		int c = 0;
-		Automaton automaton = Automaton.current();
-		for (int i = 0; i < Constants.DIRECTIONS; ++i)
-		{
-			int nx = cell.x+Constants.dirs[i][0], ny = cell.y+Constants.dirs[i][1];
-			Cell n = automaton.get(nx, ny);
-			if (n != null && n.type == type)
-				++c;
-		}
+		Cell c = Automaton.current().get(cell.x+Constants.dirs[dir][0], cell.y+Constants.dirs[dir][1]);
 		
-		return c;
+		return c.type;
 	}
 }

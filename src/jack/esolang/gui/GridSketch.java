@@ -11,7 +11,7 @@ public class GridSketch extends PApplet
   {
   	size(Constants.W,Constants.H);
   	noLoop();
-  	Life.build();
+  	Life.buildLife();
   	//redraw();
   }
       
