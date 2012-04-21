@@ -6,12 +6,12 @@ import java.util.*;
 public class Type implements Comparable<Type>
 {
 	public final String name;
-	public final GFXTemplate template;
+	public final GFXSpec template;
 	
 	ArrayList<Rule> rules;
 	ArrayList<Category> categories;
 	
-	Type(String name, GFXTemplate template)
+	Type(String name, GFXSpec template)
 	{
 		this.name = name;
 		this.template = template;

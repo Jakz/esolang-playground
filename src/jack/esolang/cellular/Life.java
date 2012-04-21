@@ -10,8 +10,8 @@ public class Life
 	{
 		Automaton a = new Automaton(Constants.WC,Constants.HC);
 		
-		Type dead = new Type("dead", new GFXTemplate(new java.awt.Color(30,30,30)));
-		Type alive = new Type("alive", new GFXTemplate(new java.awt.Color(255,128,0)));
+		Type dead = new Type("dead", new GFXSpec(new java.awt.Color(30,30,30)));
+		Type alive = new Type("alive", new GFXSpec(new java.awt.Color(255,128,0)));
 		
 		Condition sr1 = new ComparisonCondition<Integer>(new NeighborCountTerm(alive), new Number(3), ComparisonCondition.Op.EQ);
 		Rule r = new Rule(alive, sr1);

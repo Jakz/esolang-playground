@@ -7,23 +7,42 @@ import java.awt.Color;
  * 
  * @author Jack
  */
-public class GFXTemplate
+public class GFXSpec
 {
 	public final char symbol;
 	public final int foreground;
 	public final int background;
 	
-	GFXTemplate(char symbol)
+	GFXSpec(char symbol)
 	{
 		this.symbol = symbol;
 		this.foreground = Color.black.getRGB();
 		this.background = Color.white.getRGB();
 	}
 	
-	GFXTemplate(Color background)
+	public GFXSpec(char symbol, Color foreground, Color background)
+	{
+		this.symbol = symbol;
+		this.foreground = foreground.getRGB();
+		this.background = background.getRGB();
+	}
+	
+	public GFXSpec(char symbol, Color background)
+	{
+		this.symbol = symbol;
+		this.foreground = Color.white.getRGB();
+		this.background = background.getRGB();
+	}
+	
+	GFXSpec(Color background)
 	{
 		this.symbol = ' ';
 		this.background = background.getRGB();
 		this.foreground = Color.black.getRGB();
+	}
+	
+	public String toString()
+	{
+		return "GFXSpec("+symbol+", "+new Color(foreground,false)+", "+new Color(background,false)+")";
 	}
 }

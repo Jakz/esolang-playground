@@ -1,0 +1,78 @@
+/**
+ * JJTree template file created by SF JavaCC plugin 1.5.17+ wizard for JavaCC 1.5.0+
+ */options{  JDK_VERSION = "1.5";
+  MULTI = true;  static = true;}PARSER_BEGIN(eg2)package jack.esolang.cellular.parser;
+
+import jack.esolang.cellular.*;
+import java.awt.Color;
+
+public class eg2{  public static void main(String args [])  {    System.out.println("Reading from standard input...");    System.out.print("Enter an expression like \"1+(2+3)*var;\" :");    new eg2(System.in);    try    {      GFXSpec n = eg2.Start();
+      System.out.println(n);      System.out.println("Thank you.");           }    catch (Exception e)    {      System.out.println("Oops.");      System.out.println(e.getMessage());    }  }}PARSER_END(eg2)SKIP :{  " "| "\t"| "\n"| "\r"| < "//" (~[ "\n", "\r" ])*    (      "\n"    | "\r"    | "\r\n"    ) >| < "/*" (~[ "*" ])* "*"    (      ~[ "/" ] (~[ "*" ])* "*"    )*    "/" >}TOKEN : /* LITERALS */{  < INTEGER_LITERAL :    < DECIMAL_LITERAL > ([ "l", "L" ])?  | < HEX_LITERAL > ([ "l", "L" ])?  | < OCTAL_LITERAL > ([ "l", "L" ])?     >| < #DECIMAL_LITERAL : [ "1"-"9" ] ([ "0"-"9" ])* >| < #HEX_LITERAL : "0" [ "x", "X" ] ([ "0"-"9", "a"-"f", "A"-"F" ])+ >| < #OCTAL_LITERAL : "0" ([ "0"-"7" ])* >
+| < TYPE: "type" >
+| < BECOMES: "becomes" >
+| < WHEN: "when" >
+| < RULES: "rules" >
+| < NEIGHBORS: "neighbors" >
+| < TRUE: "true" >
+| < FALSE: "false" >}TOKEN : /* IDENTIFIERS */{  <CHARACTER :  (< LETTER >| < DIGIT >) >
+| <IDENTIFIER : <LETTER> (<LETTER>|<DIGIT>)* >| < #LETTER : [ "_", "a"-"z", "A"-"Z" ] >| < #DIGIT : [ "0"-"9" ] >}GFXSpec Start() :{GFXSpec g;}{  g=GFXSpec()  {    return g;  }}void Expression() :{}{  AdditiveExpression()}void AdditiveExpression() :{}{  MultiplicativeExpression()  (    (      "+"    | "-"    )    MultiplicativeExpression()  )*}void MultiplicativeExpression() :{}{  UnaryExpression()  (    (      "*"    | "/"    | "%"    )    UnaryExpression()  )*}void UnaryExpression() :{}{  "(" Expression() ")"| Identifier()| Integer()}void Identifier() :{}{  < IDENTIFIER >}int Integer() :{ Token n; }{  n=< INTEGER_LITERAL > { return Integer.parseInt(n.image); }}
+
+void Type() : {}
+{  < TYPE > Identifier() "{" GFXSpec() < RULES > "{" Rules() "}" "}"
+}
+
+void Rules() : {}
+{  (Rule())* 
+}
+
+void Rule() : {}
+{  < BECOMES > Identifier() < WHEN > BCondition() ";"
+}
+
+void NeighborCount() : {}
+{  < NEIGHBORS > "(" Identifier() ")"
+}
+
+void BConditionOp() : {}
+{  "&&" | "||"
+}
+
+void BCondition() :  {}
+{  UCondition() (BConditionOp() UCondition())*
+}
+
+void UCondition() : {}
+{  "(" BCondition() ")"
+| Comparison()
+| < TRUE >
+| < FALSE >
+}
+void ComparisonOp() : {}
+{  "==" | "!=" | ">=" | "<=" | ">" | "<"
+}
+
+void Comparison() : {}
+{  Expr() ComparisonOp() Expr()
+}
+
+void Expr() : {}
+{  NeighborCount()
+| Integer()
+}
+GFXSpec GFXSpec() : { char s = ' '; Color f = null, b = null; }
+{ 
+ [ "symbol:" s=Symbol() ] [LOOKAHEAD(2) "," "fg:" f=Color()] "," "bg:" b=Color() ";" {
+   if (f != null)
+     return new GFXSpec(s,f,b);
+   else
+     return new GFXSpec(s,b); }
+}
+
+char Symbol() : { char c; }
+{  "'" c=Character() "'" { return c; }
+}
+
+Color Color() : { int r,g,b; }{  "rgb(" r=Integer() "," g=Integer() "," b=Integer() ")" { return new Color(r,g,b); }
+}
+
+char Character() : { Token c; } { c=<CHARACTER> { return c.image.charAt(0); } }  
