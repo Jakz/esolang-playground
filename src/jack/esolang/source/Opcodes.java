@@ -5,8 +5,9 @@ import java.util.*;
 public class Opcodes<T>
 {
 	Set<Opcode<T>> opcodes;
+	boolean ignoreOthers;
 	
-	public Opcodes()
+	public Opcodes(boolean ignoreOthers)
 	{
 		opcodes = new HashSet<Opcode<T>>();
 	}
@@ -21,7 +22,7 @@ public class Opcodes<T>
 		return opcodes.size();
 	}
 	
-	public boolean valid(T v)
+	public boolean valid(Opcode<T> v)
 	{
 		return opcodes.contains(v);
 	}
