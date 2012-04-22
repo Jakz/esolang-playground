@@ -33,4 +33,9 @@ public class NeighborCountTerm implements Term<Integer>
 			this.type = Automaton.current().getType(type.name);
 		}
 	}
+	
+	public String toString()
+	{
+		return "neighbors("+type.name+")";
+	}
 }

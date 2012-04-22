@@ -2,7 +2,7 @@ package jack.esolang.cellular.rules;
 
 import jack.esolang.cellular.Cell;
 
-public class LogicCondition implements Condition
+public class BinaryCondition implements Condition
 {
 	public static enum Op
 	{
@@ -12,7 +12,7 @@ public class LogicCondition implements Condition
 	Op op;
 	Condition[] conds;
 	
-	public LogicCondition(Op op, Condition... conds)
+	public BinaryCondition(Op op, Condition... conds)
 	{
 		this.conds = conds;
 		this.op = op;
@@ -46,5 +46,20 @@ public class LogicCondition implements Condition
 	{
 		for (Condition c : conds)
 			c.solveReferences();
+	}
+	
+	public String toString()
+	{
+		String s = "";
+		
+		for (int i = 0; i < conds.length; ++i)
+		{
+			s += conds[i].toString();
+			
+			if (i < conds.length - 1)
+				s+= op == Op.AND ? " && " : " || ";
+		}
+		
+		return s;
 	}
 }

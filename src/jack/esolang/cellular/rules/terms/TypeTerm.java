@@ -23,4 +23,9 @@ public class TypeTerm implements Term<Type>
 			this.type = Automaton.current().getType(type.name);
 		}
 	}
+	
+	public String toString()
+	{
+		return type.name;
+	}
 }

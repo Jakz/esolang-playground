@@ -3,52 +3,69 @@
  */options{  JDK_VERSION = "1.5";
   MULTI = true;  static = true;}PARSER_BEGIN(eg2)package jack.esolang.cellular.parser;
 
+import jack.esolang.gui.*;
 import jack.esolang.cellular.*;
 import jack.esolang.cellular.rules.*;
 import jack.esolang.cellular.rules.terms.*;
 import jack.esolang.cellular.rules.terms.Number;
 import java.awt.Color;
+import java.util.*;
 
-public class eg2{  public static void main(String args [])  {    System.out.println("Reading from standard input...");    System.out.print("Enter an expression like \"1+(2+3)*var;\" :");    new eg2(System.in);    try    {      GFXSpec n = eg2.Start();
-      System.out.println(n);      System.out.println("Thank you.");           }    catch (Exception e)    {      System.out.println("Oops.");      System.out.println(e.getMessage());    }  }}PARSER_END(eg2)SKIP :{  " "| "\t"| "\n"| "\r"| < "//" (~[ "\n", "\r" ])*    (      "\n"    | "\r"    | "\r\n"    ) >| < "/*" (~[ "*" ])* "*"    (      ~[ "/" ] (~[ "*" ])* "*"    )*    "/" >}TOKEN : /* LITERALS */{  < INTEGER_LITERAL :    < DECIMAL_LITERAL > ([ "l", "L" ])?  | < HEX_LITERAL > ([ "l", "L" ])?  | < OCTAL_LITERAL > ([ "l", "L" ])?     >| < #DECIMAL_LITERAL : [ "1"-"9" ] ([ "0"-"9" ])* >| < #HEX_LITERAL : "0" [ "x", "X" ] ([ "0"-"9", "a"-"f", "A"-"F" ])+ >| < #OCTAL_LITERAL : "0" ([ "0"-"7" ])* >
+public class eg2{  public static void main(String args [])  {    System.out.println("Reading from standard input...");    System.out.print("Enter an expression like \"1+(2+3)*var;\" :");    new eg2(System.in);    try    {      //Spec s = eg2.Start();
+      Spec r = eg2.Start();
+      r.createAutomaton();
+      MainFrame frame = new MainFrame();
+      System.out.println(r);      System.out.println("Thank you.");           }    catch (Exception e)    {      System.out.println("Oops.");      e.printStackTrace();    }  }}PARSER_END(eg2)SKIP :{  " "| "\t"| "\n"| "\r"| < "//" (~[ "\n", "\r" ])*    (      "\n"    | "\r"    | "\r\n"    ) >| < "/*" (~[ "*" ])* "*"    (      ~[ "/" ] (~[ "*" ])* "*"    )*    "/" >}TOKEN : /* LITERALS */{  < INTEGER_LITERAL :    < DECIMAL_LITERAL > ([ "l", "L" ])?  | < HEX_LITERAL > ([ "l", "L" ])?  | < OCTAL_LITERAL > ([ "l", "L" ])?     >| < #DECIMAL_LITERAL : [ "1"-"9" ] ([ "0"-"9" ])* >| < #HEX_LITERAL : "0" [ "x", "X" ] ([ "0"-"9", "a"-"f", "A"-"F" ])+ >| < #OCTAL_LITERAL : "0" ([ "0"-"7" ])* >
 | < TYPE: "type" >
 | < BECOMES: "becomes" >
 | < WHEN: "when" >
 | < RULES: "rules" >
 | < NEIGHBORS: "neighbors" >
+| < DEFAULTTYPE: "default" >
+| < INFO: "info" >
 | < TRUE: "true" >
 | < FALSE: "false" >}TOKEN : /* IDENTIFIERS */{  <CHARACTER :  (< LETTER >| < DIGIT >) >
-| <IDENTIFIER : <LETTER> (<LETTER>|<DIGIT>)* >| < #LETTER : [ "_", "a"-"z", "A"-"Z" ] >| < #DIGIT : [ "0"-"9" ] >}GFXSpec Start() :{GFXSpec g;}{  g=GFXSpec()  {    return g;  }}void Expression() :{}{  AdditiveExpression()}void AdditiveExpression() :{}{  MultiplicativeExpression()  (    (      "+"    | "-"    )    MultiplicativeExpression()  )*}void MultiplicativeExpression() :{}{  UnaryExpression()  (    (      "*"    | "/"    | "%"    )    UnaryExpression()  )*}void UnaryExpression() :{}{  "(" Expression() ")"| Identifier()| Integer()}String Identifier() :{ Token s; }{  s=< IDENTIFIER > { return s.image; }}int Integer() :{ Token n; }{  n=< INTEGER_LITERAL > { return Integer.parseInt(n.image); }}
+| <IDENTIFIER : <LETTER> (<LETTER>|<DIGIT>)* >| < #LETTER : [ "_", "a"-"z", "A"-"Z" ] >| < #DIGIT : [ "0"-"9" ] >}Spec Start() :{Type[] types; SpecInfo info;}{  info=SpecInfo() types=Types() { return new Spec(info,types); }}void Expression() :{}{  AdditiveExpression()}void AdditiveExpression() :{}{  MultiplicativeExpression()  (    (      "+"    | "-"    )    MultiplicativeExpression()  )*}void MultiplicativeExpression() :{}{  UnaryExpression()  (    (      "*"    | "/"    | "%"    )    UnaryExpression()  )*}void UnaryExpression() :{}{  "(" Expression() ")"| Identifier()| Integer()}String Identifier() :{ Token s; }{  s=< IDENTIFIER > { return s.image; }}int Integer() :{ Token n; }{  n=< INTEGER_LITERAL > { return Integer.parseInt(n.image); }}
 
-void Type() : {}
-{  < TYPE > Identifier() "{" GFXSpec() < RULES > "{" Rules() "}" "}"
+SpecInfo SpecInfo() : { String s; }
+{  < INFO > "{" s=DefaultType() "}" { return new SpecInfo(s); }
+}
+String DefaultType() : { String s; }
+{  < DEFAULTTYPE > s=Identifier() ";" { return s; }
+}
+Type[] Types() : { ArrayList<Type> types = new ArrayList<Type>(); Type t; }
+{  (t=Type() { types.add(t); } )* { return types.toArray(new Type[types.size()]); }
+}
+Type Type() : { GFXSpec s; Rule[] r; String n;}
+{  < TYPE > n=Identifier() "{" s=GFXSpec() < RULES > "{" r=Rules() "}" "}" { return new Type(n,s,r); }
 }
 
-void Rules() : {}
-{  (Rule())* 
+Rule[] Rules() : { ArrayList<Rule> rules = new ArrayList<Rule>(); Rule r; }
+{  (r=Rule() {rules.add(r); } )* { return rules.toArray(new Rule[rules.size()]); }
 }
 
-void Rule() : {}
-{  < BECOMES > Identifier() < WHEN > BCondition() ";"
+Rule Rule() : { String n; Condition c;}
+{  < BECOMES > n=Identifier() < WHEN > c=BCondition() ";" { return new Rule(new TypePlaceholder(n),c); }
 }
 
 Term<Integer> NeighborCount() : { String s; }
 {  < NEIGHBORS > "(" s=Identifier() ")" { return new NeighborCountTerm(new TypePlaceholder(s)); }    
 }
 
-void BConditionOp() : {}
-{  "&&" | "||"
+BinaryCondition.Op BConditionOp() : {}
+{  "&&" { return BinaryCondition.Op.AND; }
+| "||" { return BinaryCondition.Op.OR; }
 }
 
-void BCondition() :  {}
-{  UCondition() (BConditionOp() UCondition())*
+Condition BCondition() :  {UnaryCondition u1, u2; BinaryCondition.Op op;}
+{
+  u1=UCondition() [ op=BConditionOp() u2=UCondition() { return new BinaryCondition(op, new Condition[] {u1,u2}); } ] { return u1; }
 }
 
-void UCondition() : {}
+UnaryCondition UCondition() : {Condition c;}
 {  "(" BCondition() ")"
-| Comparison()
-| < TRUE >
-| < FALSE >
+| c=Comparison() { return new UnaryCondition(c); }
+| < TRUE > { return new UnaryCondition(true); }| < FALSE > { return new UnaryCondition(false); }
 }
 ComparisonCondition.Op ComparisonOp() : {}
 {  "==" { return ComparisonCondition.Op.EQ; }

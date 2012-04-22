@@ -26,6 +26,12 @@ public class Rule
 	
 	public void solveReferences()
 	{
+		type = Automaton.current().getType(type.name);
 		condition.solveReferences();
+	}
+	
+	public String toString()
+	{
+		return "becomes "+type.name+" when "+condition+"\n";
 	}
 }

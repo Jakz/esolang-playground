@@ -7,12 +7,12 @@ public class UnaryCondition implements Condition
 	boolean value;
 	Condition inner;
 	
-	UnaryCondition(boolean value)
+	public UnaryCondition(boolean value)
 	{
 		this.value = value;
 	}
 	
-	UnaryCondition(Condition inner)
+	public UnaryCondition(Condition inner)
 	{
 		this.inner = inner;
 	}
@@ -29,5 +29,15 @@ public class UnaryCondition implements Condition
 	{
 		if (inner != null)
 			inner.solveReferences();
+	}
+	
+	public String toString()
+	{
+		if (inner == null)
+		{
+			return value ? "true": "false";
+		}
+		else
+			return inner.toString();
 	}
 }

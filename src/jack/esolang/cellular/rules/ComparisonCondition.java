@@ -7,12 +7,18 @@ public class ComparisonCondition<T extends Comparable<? super T>> implements Con
 {
 	public static enum Op
 	{
-		EQ,
-		NEQ,
-		GEQ,
-		GRE,
-		LEQ,
-		LES
+		EQ("=="),
+		NEQ("!="),
+		GEQ(">="),
+		GRE(">"),
+		LEQ("<="),
+		LES("<");
+		
+		String str;
+		
+		Op(String str) { this.str = str; }
+		
+		public String toString() { return str; }
 	};
 	
 	Term<T> t1, t2;
@@ -43,5 +49,10 @@ public class ComparisonCondition<T extends Comparable<? super T>> implements Con
 	{
 		t1.solveReferences();
 		t2.solveReferences();
+	}
+	
+	public String toString()
+	{
+		return t1.toString()+" "+op+" "+t2.toString();
 	}
 }

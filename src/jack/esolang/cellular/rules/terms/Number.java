@@ -17,4 +17,9 @@ public class Number implements Term<Integer>
 	}
 	
 	public void solveReferences() {}
+	
+	public String toString()
+	{
+		return i+"";
+	}
 }

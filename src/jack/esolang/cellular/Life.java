@@ -18,7 +18,7 @@ public class Life
 		
 		Condition dr1 = new ComparisonCondition<Integer>(new NeighborCountTerm(alive), new Number(4), ComparisonCondition.Op.GEQ);
 		Condition dr2 = new ComparisonCondition<Integer>(new NeighborCountTerm(alive), new Number(1), ComparisonCondition.Op.LEQ);
-		Rule r2 = new Rule(dead, new LogicCondition(LogicCondition.Op.OR, dr1,dr2));
+		Rule r2 = new Rule(dead, new BinaryCondition(BinaryCondition.Op.OR, dr1,dr2));
 		
 		dead.addRule(r);
 		alive.addRule(r2);

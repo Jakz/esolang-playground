@@ -6,6 +6,7 @@ public class Automaton
 {
 	Cell[][] cells;
 	HashMap<String, Type> types;
+	Type defaultType;
 	int w;
 	int h;
 	
@@ -38,6 +39,11 @@ public class Automaton
 		types.put(type.name, type);
 	}
 	
+	public void setDefault(Type type)
+	{
+		defaultType = type;
+	}
+	
 	public Type getType(String name)
 	{
 		return types.get(name);
@@ -50,6 +56,11 @@ public class Automaton
 			{
 				cells[i][j].type = type;
 			}
+	}
+	
+	public void reset()
+	{
+		reset(defaultType);
 	}
 	
 	public void set(Type type, int i, int j)
