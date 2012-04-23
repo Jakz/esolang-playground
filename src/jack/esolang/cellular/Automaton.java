@@ -67,6 +67,11 @@ public class Automaton
 	{
 		return types.get(name);
 	}
+
+	public Collection<Type> getTypes()
+	{
+		return types.values();
+	}
 	
 	public Type getLeftType()
 	{
