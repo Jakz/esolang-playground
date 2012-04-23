@@ -22,4 +22,9 @@ public class NeighborTerm implements Term<Type>
 	}
 	
 	public void solveReferences(Automaton a) {}
+	
+	public String toString()
+	{
+		return Constants.dirsName[dir];
+	}
 }

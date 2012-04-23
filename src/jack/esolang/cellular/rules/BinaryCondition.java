@@ -50,7 +50,7 @@ public class BinaryCondition implements Condition
 	
 	public String toString()
 	{
-		String s = "";
+		String s = "(";
 		
 		for (int i = 0; i < conds.length; ++i)
 		{
@@ -59,6 +59,8 @@ public class BinaryCondition implements Condition
 			if (i < conds.length - 1)
 				s+= op == Op.AND ? " && " : " || ";
 		}
+		
+		s += ")";
 		
 		return s;
 	}

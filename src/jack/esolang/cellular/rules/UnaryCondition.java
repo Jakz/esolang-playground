@@ -4,40 +4,44 @@ import jack.esolang.cellular.*;
 
 public class UnaryCondition implements Condition
 {
-	boolean value;
-	Condition inner;
-	
-	public UnaryCondition(boolean value)
-	{
-		this.value = value;
+	public enum Op {
+		NOT("!");
+		
+		public final String val;
+		
+		Op(String val)
+		{
+			this.val = val;
+		}
+		
+		public String toString() { return val; }
 	}
 	
-	public UnaryCondition(Condition inner)
+	private final Condition inner;
+	private final Op op;
+
+	public UnaryCondition(Op op, Condition inner)
 	{
 		this.inner = inner;
+		this.op = op;
 	}
 	
 	public boolean evaluate(Cell cell)
 	{
-		if (inner == null)
-			return value;
-		else
-			return !inner.evaluate(cell);
+		switch (op)
+		{
+			case NOT: return !inner.evaluate(cell);
+			default: return false;
+		}
 	}
 	
 	public void solveReferences(Automaton a)
 	{
-		if (inner != null)
-			inner.solveReferences(a);
+		inner.solveReferences(a);
 	}
 	
 	public String toString()
 	{
-		if (inner == null)
-		{
-			return value ? "true": "false";
-		}
-		else
-			return inner.toString();
+		return op+"("+inner.toString()+")";
 	}
 }

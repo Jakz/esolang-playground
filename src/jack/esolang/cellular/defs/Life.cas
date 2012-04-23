@@ -1,25 +1,19 @@
-info
-{
+info {
   name life;
   default dead;
   leftClick alive;
   rightClick dead;
 }
 
-type alive
-{
-  symbol: 'a', fg: rgb(255,255,255), bg: rgb(220,220,0);
-  rules
-  {
-    becomes dead when neighbors(alive) >= 4 || neighbors(alive) <= 1;
-  }
+type alive {
+  becomes dead when neighbors(alive) >= 4 || neighbors(alive) <= 1;
 }
 
-type dead
-{
-  symbol: 'd', fg: rgb(255,255,255), bg: rgb(30,30,30);
-  rules
-  {
-    becomes alive when neighbors(alive) == 3;
-  }
+type dead {
+  becomes alive when neighbors(alive) == 3;
+}
+
+gfx {
+  alive { symbol: 'a', fg: rgb(255,255,255), bg: rgb(220,220,0); }
+  dead { symbol: 'd', fg: rgb(255,255,255), bg: rgb(30,30,30); }
 }

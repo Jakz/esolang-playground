@@ -6,7 +6,6 @@ import java.util.*;
 public class Type implements Comparable<Type>
 {
 	public String name;
-	public GFXSpec template;
 	
 	List<Rule> rules;
 	ArrayList<Category> categories;
@@ -16,23 +15,21 @@ public class Type implements Comparable<Type>
 		
 	}
 	
-	Type(String name, GFXSpec template)
+	Type(String name)
 	{
 		this.name = name;
-		this.template = template;
 		this.rules = new ArrayList<Rule>();
 		this.categories = new ArrayList<Category>();
 	}
 	
-	public Type(String name, GFXSpec template, Rule[] rules)
+	public Type(String name, Rule[] rules)
 	{
 		this.name = name;
-		this.template = template;
 		//this.rules = new ArrayList<Rule>();
 		this.rules = Arrays.asList(rules);
 		this.categories = new ArrayList<Category>();
 	}
-	
+
 	public String toString()
 	{
 		String s = name+"\n";

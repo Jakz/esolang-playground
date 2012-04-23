@@ -26,7 +26,7 @@ public class GridSketch extends PApplet
       for (int j = 0; j < Constants.HC; ++j)
       {
         Cell c = a.get(i, j);
-      	fill(c.type.template.background);
+      	fill(a.getTemplate(c.type).background);
         rect(i*Constants.cellSize,Constants.H-Constants.cellSize*j - Constants.cellSize,Constants.cellSize,Constants.cellSize);
       }
   }

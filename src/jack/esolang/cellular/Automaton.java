@@ -6,6 +6,7 @@ public class Automaton
 {
 	Cell[][] cells;
 	HashMap<String, Type> types;
+	private HashMap<Type, GFXSpec> templates;
 	Type defaultType;
 	Type leftType, rightType;
 	int w;
@@ -36,6 +37,7 @@ public class Automaton
 			}
 		
 		types = new HashMap<String, Type>();
+		templates = new HashMap<Type, GFXSpec>();
 	}
 	
 	public void addType(Type type)
@@ -48,6 +50,17 @@ public class Automaton
 		defaultType = type;
 		this.leftType = left;
 		this.rightType = right;
+	}
+	
+	public void setTemplates(HashMap<String, GFXSpec> specs)
+	{
+		for (String k : specs.keySet())
+			templates.put(getType(k), specs.get(k));
+	}
+	
+	public GFXSpec getTemplate(Type t)
+	{
+		return templates.get(t);
 	}
 	
 	public Type getType(String name)

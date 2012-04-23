@@ -8,18 +8,16 @@ info
 
 type alive
 {
-  symbol: 'a', fg: rgb(255,255,255), bg: rgb(220,220,0);
-  rules
-  {
-    /*becomes dead when (upleft(alive) && (up(alive) || upright(alive))) || !((upleft(alive) || up(alive)) || upright(alive));*/
-  }
+  /*becomes dead when (upleft(alive) && (up(alive) || upright(alive))) || !((upleft(alive) || up(alive)) || upright(alive));*/
 }
 
 type dead
 {
-  symbol: 'd', fg: rgb(255,255,255), bg: rgb(30,30,30);
-  rules
-  {
-    becomes alive when (upleft(alive) && (up(dead) && upright(dead))) || (upleft(dead) && (up(alive) || upright(alive)));
-  }
+  becomes alive when (upleft(alive) && !up(alive) && !upright(alive)) || (!upleft(alive) && (up(alive) || upright(alive)));
+}
+
+gfx
+{
+  dead { symbol: 'd', fg: rgb(255,255,255), bg: rgb(30,30,30); }
+  alive { symbol: 'a', fg: rgb(255,255,255), bg: rgb(220,220,0); }
 }

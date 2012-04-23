@@ -19,7 +19,7 @@ public class eg2{  public static void main(String args [])  {    System.out.
 | < TYPE: "type" >
 | < BECOMES: "becomes" >
 | < WHEN: "when" >
-| < RULES: "rules" >
+| < GFX: "gfx" >
 | < NEIGHBORS: "neighbors" >
 | < DEFAULTTYPE: "default" >
 | < LEFTCLICK: "leftClick" >
@@ -36,7 +36,7 @@ public class eg2{  public static void main(String args [])  {    System.out.
 | < UPRIGHT: "upright" >
 | < DOWNLEFT: "downleft" >
 | < DOWNRIGHT: "downright" >}TOKEN : /* IDENTIFIERS */{  <CHARACTER :  (< LETTER >| < DIGIT >) >
-| <IDENTIFIER : <LETTER> (<LETTER>|<DIGIT>)* >| < #LETTER : [ "_", "a"-"z", "A"-"Z" ] >| < #DIGIT : [ "0"-"9" ] >}Spec Start() :{Type[] types; SpecInfo info;}{  info=SpecInfo() types=Types() { return new Spec(info,types); }}void Expression() :{}{  AdditiveExpression()}void AdditiveExpression() :{}{  MultiplicativeExpression()  (    (      "+"    | "-"    )    MultiplicativeExpression()  )*}void MultiplicativeExpression() :{}{  UnaryExpression()  (    (      "*"    | "/"    | "%"    )    UnaryExpression()  )*}void UnaryExpression() :{}{  "(" Expression() ")"| Identifier()| Integer()}String Identifier() :{ Token s; }{  s=< IDENTIFIER > { return s.image; }}int Integer() :{ Token n; }{  n=< INTEGER_LITERAL > { return Integer.parseInt(n.image); }}
+| <IDENTIFIER : <LETTER> (<LETTER>|<DIGIT>)* >| < #LETTER : [ "_", "a"-"z", "A"-"Z" ] >| < #DIGIT : [ "0"-"9" ] >}Spec Start() :{Type[] types; SpecInfo info; HashMap<String, GFXSpec> map; }{  info=SpecInfo() types=Types() map=GFXSpecMap() { return new Spec(info,types,map); }}void Expression() :{}{  AdditiveExpression()}void AdditiveExpression() :{}{  MultiplicativeExpression()  (    (      "+"    | "-"    )    MultiplicativeExpression()  )*}void MultiplicativeExpression() :{}{  UnaryExpression()  (    (      "*"    | "/"    | "%"    )    UnaryExpression()  )*}void UnaryExpression() :{}{  "(" Expression() ")"| Identifier()| Integer()}String Identifier() :{ Token s; }{  s=< IDENTIFIER > { return s.image; }}int Integer() :{ Token n; }{  n=< INTEGER_LITERAL > { return Integer.parseInt(n.image); }}
 
 SpecInfo SpecInfo() : { String s, n, l, r; }
 {  < INFO > "{" n=SpecName() s=DefaultType() l=LeftType() r=RightType() "}" { return new SpecInfo(n,s,l,r); }
@@ -62,8 +62,8 @@ String SpecName() : { String s; }
 Type[] Types() : { ArrayList<Type> types = new ArrayList<Type>(); Type t; }
 {  (t=Type() { types.add(t); } )* { return types.toArray(new Type[types.size()]); }
 }
-Type Type() : { GFXSpec s; Rule[] r; String n;}
-{  < TYPE > n=Identifier() "{" s=GFXSpec() < RULES > "{" r=Rules() "}" "}" { return new Type(n,s,r); }
+Type Type() : { Rule[] r; String n;}
+{  < TYPE > n=Identifier() "{" r=Rules() "}" { return new Type(n,r); }
 }
 
 Rule[] Rules() : { ArrayList<Rule> rules = new ArrayList<Rule>(); Rule r; }
@@ -74,21 +74,32 @@ Rule Rule() : { String n; Condition c;}
 {  < BECOMES > n=Identifier() < WHEN > c=BCondition() ";" { return new Rule(new TypePlaceholder(n),c); }
 }
 
-BinaryCondition.Op BConditionOp() : {}
-{  "&&" { return BinaryCondition.Op.AND; }
-| "||" { return BinaryCondition.Op.OR; }
-}
-
-Condition BCondition() :  {Condition u1, u2; BinaryCondition.Op op;}
+Condition BCondition() : { ArrayList<Condition> conditions = new ArrayList<Condition>(); Condition u, u2; }
 {
-  u1=UCondition() [ op=BConditionOp() u2=UCondition() { return new BinaryCondition(op, new Condition[] {u1,u2}); } ] { return u1; }
+  u=B2Condition() {conditions.add(u);} ("&&" u2=B2Condition() {conditions.add(u2);} )*
+  {
+    if (conditions.size() == 1)
+      return u;
+    else
+      return new BinaryCondition(BinaryCondition.Op.AND, conditions.toArray(new Condition[conditions.size()]));
+  }
 }
 
+Condition B2Condition() : { ArrayList<Condition> conditions = new ArrayList<Condition>(); Condition u, u2; }
+{
+  u=UCondition() {conditions.add(u);} ("||" u2=UCondition() {conditions.add(u2);} )*
+  {
+    if (conditions.size() == 1)
+      return u;
+    else
+      return new BinaryCondition(BinaryCondition.Op.OR, conditions.toArray(new Condition[conditions.size()]));
+  }
+}
 Condition UCondition() : {Condition c; int d; String id;}
 {  "(" c=BCondition() ")" { return c; }
-| "!" c=UCondition() { return c; }
+| "!" c=UCondition() { return new UnaryCondition(UnaryCondition.Op.NOT,c); }
 | c=Comparison() { return c; }
-| < TRUE > { return new UnaryCondition(true); }| < FALSE > { return new UnaryCondition(false); }
+| < TRUE > { return new ConstantCondition(true); }| < FALSE > { return new ConstantCondition(false); }
 | d=Direction() "(" id=Identifier() ")" {  return new ComparisonCondition(new NeighborTerm(d),new TypeTerm(new TypePlaceholder(id)),ComparisonCondition.Op.EQ); }
 }
 ComparisonCondition.Op ComparisonOp() : {}
@@ -123,6 +134,9 @@ Term<Integer> Expr() : {Term<Integer> t; Integer i; }
 Term<Integer> NeighborCount() : { String s; }
 {
   < NEIGHBORS > "(" s=Identifier() ")" { return new NeighborCountTerm(new TypePlaceholder(s)); }    
+}
+HashMap<String, GFXSpec> GFXSpecMap() : { HashMap<String,GFXSpec> map = new HashMap<String,GFXSpec>(); String id; GFXSpec spec; }
+{  <GFX> "{" (id=Identifier() "{" spec=GFXSpec() "}" { map.put(id,spec); } )* "}" { return map; }
 }
 GFXSpec GFXSpec() : { char s = ' '; Color f = null, b = null; }
 { 
