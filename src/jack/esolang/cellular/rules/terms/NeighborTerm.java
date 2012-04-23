@@ -15,8 +15,11 @@ public class NeighborTerm implements Term<Type>
 	{
 		Cell c = Automaton.current().get(cell.x+Constants.dirs[dir][0], cell.y+Constants.dirs[dir][1]);
 		
-		return c.type;
+		if (c != null)
+			return c.type;
+		else
+			return null;
 	}
 	
-	public void solveReferences() {}
+	public void solveReferences(Automaton a) {}
 }

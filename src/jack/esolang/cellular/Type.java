@@ -63,9 +63,9 @@ public class Type implements Comparable<Type>
 		return name.compareTo(name);
 	}
 	
-	public void solveReferences()
+	public void solveReferences(Automaton a)
 	{
 		for (Rule r : rules)
-			r.solveReferences();
+			r.solveReferences(a);
 	}
 }

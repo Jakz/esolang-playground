@@ -1,6 +1,6 @@
 package jack.esolang;
 
-import jack.esolang.cellular.DefParser;
+import jack.esolang.cellular.defs.*;
 import jack.esolang.gui.*;
 
 import jack.esolang.languages.*;
@@ -13,9 +13,10 @@ public class Main
 	public static void main(String[] args)
 	{
 		//MainFrame mainFrame = new MainFrame();
-		//DefParser.parse();
+		AutomataRepository repo = new AutomataRepository();
+		repo.searchAndLoad();
 		
-		String helloWorld = 
+		/*String helloWorld = 
 			"++++++++++"+
 			"["+
 			"   >+++++++>++++++++++>+++>+<<<<-"+
@@ -44,6 +45,21 @@ public class Main
 		bf.setMemory(new FixedTape<Integer>(1000, Builder.intBuilder()));
 		bf.setStdin(new StringStdin("Antani"));
 		bf.setStdout(new PrintStdout<Character>());
-		bf.run();
+		bf.run();*/
+	}
+	
+	public static void foo(String[] array)
+	{
+		String string = new String();
+		for (int i = 0; i < array.length; i++) {
+			
+		}
+	}
+	
+	public static void foo2(String[] array)
+	{
+		for (int i = 0; i < array.length; i++) {
+			String string = new String();
+		}
 	}
 }

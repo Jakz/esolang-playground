@@ -2,7 +2,7 @@ package jack.esolang.cellular;
 
 public class Constants
 {
-	public static int cellSize = 15;
+	public static int cellSize = 10;
 	public static int W = 900;
 	public static int H = 600;
 	public static int WC = W / cellSize;

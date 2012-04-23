@@ -26,11 +26,11 @@ public class NeighborCountTerm implements Term<Integer>
 		return c;
 	}
 	
-	public void solveReferences()
+	public void solveReferences(Automaton a)
 	{
 		if (type instanceof TypePlaceholder)
 		{
-			this.type = Automaton.current().getType(type.name);
+			this.type = a.getType(type.name);
 		}
 	}
 	

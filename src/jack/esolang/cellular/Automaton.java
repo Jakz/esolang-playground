@@ -7,6 +7,7 @@ public class Automaton
 	Cell[][] cells;
 	HashMap<String, Type> types;
 	Type defaultType;
+	Type leftType, rightType;
 	int w;
 	int h;
 	
@@ -15,6 +16,11 @@ public class Automaton
 	public static Automaton current()
 	{
 		return current;
+	}
+	
+	public static void setCurrent(Automaton current)
+	{
+		Automaton.current = current;
 	}
 	
 	Automaton(int w, int h)
@@ -30,8 +36,6 @@ public class Automaton
 			}
 		
 		types = new HashMap<String, Type>();
-		
-		Automaton.current = this;
 	}
 	
 	public void addType(Type type)
@@ -39,14 +43,31 @@ public class Automaton
 		types.put(type.name, type);
 	}
 	
-	public void setDefault(Type type)
+	public void setDefaults(Type type, Type left, Type right)
 	{
 		defaultType = type;
+		this.leftType = left;
+		this.rightType = right;
 	}
 	
 	public Type getType(String name)
 	{
 		return types.get(name);
+	}
+	
+	public Type getLeftType()
+	{
+		return leftType;
+	}
+	
+	public Type getRightType()
+	{
+		return rightType;
+	}
+	
+	public Type getDefaultType()
+	{
+		return defaultType;
 	}
 	
 	public void reset(Type type)
@@ -89,5 +110,13 @@ public class Automaton
 			{
 				cells[i][j].update();
 			}
+	}
+	
+	public String toString()
+	{
+		String s = "Automata \n";
+		for (Type r : types.values())
+			s += r;
+		return s;
 	}
 }

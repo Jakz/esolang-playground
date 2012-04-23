@@ -2,10 +2,15 @@ package jack.esolang.cellular;
 
 public class SpecInfo
 {
-	String defaultType;
+	public final String defaultType;
+	public final String leftType, rightType;
+	public final String name;
 	
-	public SpecInfo(String defaultType)
+	public SpecInfo(String name, String defaultType, String leftType, String rightType)
 	{
+		this.name = name;
 		this.defaultType = defaultType;
+		this.leftType = leftType;
+		this.rightType = rightType;
 	}
 }

@@ -1,7 +1,7 @@
 /**
  * JJTree template file created by SF JavaCC plugin 1.5.17+ wizard for JavaCC 1.5.0+
  */options{  JDK_VERSION = "1.5";
-  MULTI = true;  static = true;}PARSER_BEGIN(eg2)package jack.esolang.cellular.parser;
+  MULTI = true;  static = false;}PARSER_BEGIN(eg2)package jack.esolang.cellular.parser;
 
 import jack.esolang.gui.*;
 import jack.esolang.cellular.*;
@@ -12,26 +12,52 @@ import java.awt.Color;
 import java.util.*;
 
 public class eg2{  public static void main(String args [])  {    System.out.println("Reading from standard input...");    System.out.print("Enter an expression like \"1+(2+3)*var;\" :");    new eg2(System.in);    try    {      //Spec s = eg2.Start();
-      Spec r = eg2.Start();
+      /*Spec r = eg2.Start();
       r.createAutomaton();
       MainFrame frame = new MainFrame();
-      System.out.println(r);      System.out.println("Thank you.");           }    catch (Exception e)    {      System.out.println("Oops.");      e.printStackTrace();    }  }}PARSER_END(eg2)SKIP :{  " "| "\t"| "\n"| "\r"| < "//" (~[ "\n", "\r" ])*    (      "\n"    | "\r"    | "\r\n"    ) >| < "/*" (~[ "*" ])* "*"    (      ~[ "/" ] (~[ "*" ])* "*"    )*    "/" >}TOKEN : /* LITERALS */{  < INTEGER_LITERAL :    < DECIMAL_LITERAL > ([ "l", "L" ])?  | < HEX_LITERAL > ([ "l", "L" ])?  | < OCTAL_LITERAL > ([ "l", "L" ])?     >| < #DECIMAL_LITERAL : [ "1"-"9" ] ([ "0"-"9" ])* >| < #HEX_LITERAL : "0" [ "x", "X" ] ([ "0"-"9", "a"-"f", "A"-"F" ])+ >| < #OCTAL_LITERAL : "0" ([ "0"-"7" ])* >
+      System.out.println(r);      System.out.println("Thank you."); */          }    catch (Exception e)    {      System.out.println("Oops.");      e.printStackTrace();    }  }}PARSER_END(eg2)SKIP :{  " "| "\t"| "\n"| "\r"| < "//" (~[ "\n", "\r" ])*    (      "\n"    | "\r"    | "\r\n"    ) >| < "/*" (~[ "*" ])* "*"    (      ~[ "/" ] (~[ "*" ])* "*"    )*    "/" >}TOKEN : /* LITERALS */{  < INTEGER_LITERAL :    < DECIMAL_LITERAL > ([ "l", "L" ])?  | < HEX_LITERAL > ([ "l", "L" ])?  | < OCTAL_LITERAL > ([ "l", "L" ])?     >| < #DECIMAL_LITERAL : [ "1"-"9" ] ([ "0"-"9" ])* >| < #HEX_LITERAL : "0" [ "x", "X" ] ([ "0"-"9", "a"-"f", "A"-"F" ])+ >| < #OCTAL_LITERAL : "0" ([ "0"-"7" ])* >
 | < TYPE: "type" >
 | < BECOMES: "becomes" >
 | < WHEN: "when" >
 | < RULES: "rules" >
 | < NEIGHBORS: "neighbors" >
 | < DEFAULTTYPE: "default" >
+| < LEFTCLICK: "leftClick" >
+| < RIGHTCLICK: "rightClick" >
+| < NAME: "name" >
 | < INFO: "info" >
 | < TRUE: "true" >
-| < FALSE: "false" >}TOKEN : /* IDENTIFIERS */{  <CHARACTER :  (< LETTER >| < DIGIT >) >
+| < FALSE: "false" >
+| < UP: "up"|"UP"|"^" >
+| < DOWN: "down"|"DOWN"|"v" >
+| < LEFT: "left"|"LEFT" >
+| < RIGHT: "right"|"RIGHT" >
+| < UPLEFT: "upleft" >
+| < UPRIGHT: "upright" >
+| < DOWNLEFT: "downleft" >
+| < DOWNRIGHT: "downright" >}TOKEN : /* IDENTIFIERS */{  <CHARACTER :  (< LETTER >| < DIGIT >) >
 | <IDENTIFIER : <LETTER> (<LETTER>|<DIGIT>)* >| < #LETTER : [ "_", "a"-"z", "A"-"Z" ] >| < #DIGIT : [ "0"-"9" ] >}Spec Start() :{Type[] types; SpecInfo info;}{  info=SpecInfo() types=Types() { return new Spec(info,types); }}void Expression() :{}{  AdditiveExpression()}void AdditiveExpression() :{}{  MultiplicativeExpression()  (    (      "+"    | "-"    )    MultiplicativeExpression()  )*}void MultiplicativeExpression() :{}{  UnaryExpression()  (    (      "*"    | "/"    | "%"    )    UnaryExpression()  )*}void UnaryExpression() :{}{  "(" Expression() ")"| Identifier()| Integer()}String Identifier() :{ Token s; }{  s=< IDENTIFIER > { return s.image; }}int Integer() :{ Token n; }{  n=< INTEGER_LITERAL > { return Integer.parseInt(n.image); }}
 
-SpecInfo SpecInfo() : { String s; }
-{  < INFO > "{" s=DefaultType() "}" { return new SpecInfo(s); }
+SpecInfo SpecInfo() : { String s, n, l, r; }
+{  < INFO > "{" n=SpecName() s=DefaultType() l=LeftType() r=RightType() "}" { return new SpecInfo(n,s,l,r); }
+}
+
+String LeftType() : { String s; }
+{
+  < LEFTCLICK > s=Identifier() ";" { return s; }
+}
+
+String RightType() : { String s; }
+{
+  < RIGHTCLICK > s=Identifier() ";" { return s; }
 }
 String DefaultType() : { String s; }
 {  < DEFAULTTYPE > s=Identifier() ";" { return s; }
+}
+
+String SpecName() : { String s; }
+{
+  < NAME > s=Identifier() ";" { return s; }
 }
 Type[] Types() : { ArrayList<Type> types = new ArrayList<Type>(); Type t; }
 {  (t=Type() { types.add(t); } )* { return types.toArray(new Type[types.size()]); }
@@ -48,24 +74,22 @@ Rule Rule() : { String n; Condition c;}
 {  < BECOMES > n=Identifier() < WHEN > c=BCondition() ";" { return new Rule(new TypePlaceholder(n),c); }
 }
 
-Term<Integer> NeighborCount() : { String s; }
-{  < NEIGHBORS > "(" s=Identifier() ")" { return new NeighborCountTerm(new TypePlaceholder(s)); }    
-}
-
 BinaryCondition.Op BConditionOp() : {}
 {  "&&" { return BinaryCondition.Op.AND; }
 | "||" { return BinaryCondition.Op.OR; }
 }
 
-Condition BCondition() :  {UnaryCondition u1, u2; BinaryCondition.Op op;}
+Condition BCondition() :  {Condition u1, u2; BinaryCondition.Op op;}
 {
   u1=UCondition() [ op=BConditionOp() u2=UCondition() { return new BinaryCondition(op, new Condition[] {u1,u2}); } ] { return u1; }
 }
 
-UnaryCondition UCondition() : {Condition c;}
-{  "(" BCondition() ")"
-| c=Comparison() { return new UnaryCondition(c); }
+Condition UCondition() : {Condition c; int d; String id;}
+{  "(" c=BCondition() ")" { return c; }
+| "!" c=UCondition() { return c; }
+| c=Comparison() { return c; }
 | < TRUE > { return new UnaryCondition(true); }| < FALSE > { return new UnaryCondition(false); }
+| d=Direction() "(" id=Identifier() ")" {  return new ComparisonCondition(new NeighborTerm(d),new TypeTerm(new TypePlaceholder(id)),ComparisonCondition.Op.EQ); }
 }
 ComparisonCondition.Op ComparisonOp() : {}
 {  "==" { return ComparisonCondition.Op.EQ; }
@@ -81,8 +105,24 @@ ComparisonCondition Comparison() : { Term<?> t1, t2; ComparisonCondition.Op op; 
   }
 }
 
-Term<Integer> Expr() : {Term<Integer> t; Integer i;}
+int Direction() : { int i; }
+{  < UP > { return Constants.UP; }
+| < DOWN > { return Constants.DOWN; }
+| < LEFT > { return Constants.LEFT; }
+| < RIGHT > { return Constants.RIGHT; }
+| < UPLEFT > { return Constants.UP_LEFT; }
+| < UPRIGHT > { return Constants.UP_RIGHT; }
+| < DOWNLEFT > { return Constants.DOWN_LEFT; }
+| < DOWNRIGHT > { return Constants.DOWN_RIGHT; }
+}
+
+Term<Integer> Expr() : {Term<Integer> t; Integer i; }
 {   t=NeighborCount() { return t; }|  i=Integer() { return new Number(i); }
+}
+
+Term<Integer> NeighborCount() : { String s; }
+{
+  < NEIGHBORS > "(" s=Identifier() ")" { return new NeighborCountTerm(new TypePlaceholder(s)); }    
 }
 GFXSpec GFXSpec() : { char s = ' '; Color f = null, b = null; }
 { 

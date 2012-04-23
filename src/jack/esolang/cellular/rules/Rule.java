@@ -24,10 +24,10 @@ public class Rule
 		return false;
 	}
 	
-	public void solveReferences()
+	public void solveReferences(Automaton a)
 	{
-		type = Automaton.current().getType(type.name);
-		condition.solveReferences();
+		type = a.getType(type.name);
+		condition.solveReferences(a);
 	}
 	
 	public String toString()

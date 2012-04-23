@@ -1,0 +1,40 @@
+info
+{
+  name wireworld;
+  default void;
+  leftClick head;
+  rightClick copper;
+}
+
+type void
+{
+  symbol: 'a', fg: rgb(255,255,255), bg: rgb(30,30,30);
+  rules {}
+}
+
+type head
+{
+  symbol: 'b', fg: rgb(255,255,255), bg: rgb(200,200,255);
+  rules
+  {
+    becomes tail when true;
+  }
+}
+
+type tail
+{
+  symbol: 'c', fg: rgb(255,255,255), bg: rgb(100,100,200);
+  rules
+  {
+    becomes copper when true;
+  }
+}
+
+type copper
+{
+  symbol: 'd', fg: rgb(255,115,115), bg: rgb(255,115,115);
+  rules
+  {
+    becomes head when neighbors(head) > 0 && neighbors(head) < 3;
+  }
+}

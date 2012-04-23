@@ -33,22 +33,27 @@ public class ComparisonCondition<T extends Comparable<? super T>> implements Con
 	
 	public boolean evaluate(Cell cell)
 	{
+		T v1 = t1.getValue(cell);
+		T v2 = t2.getValue(cell);
+		
+		if (v1 == null || v2 == null) return false;
+		
 		switch (op)
 		{
-			case EQ: return t1.getValue(cell).equals(t2.getValue(cell));
-			case NEQ: return !t1.getValue(cell).equals(t2.getValue(cell));
-			case GEQ: return t1.getValue(cell).compareTo(t2.getValue(cell)) >= 0;
-			case LEQ: return t1.getValue(cell).compareTo(t2.getValue(cell)) <= 0;
-			case GRE: return t1.getValue(cell).compareTo(t2.getValue(cell)) > 0;
-			case LES: return t1.getValue(cell).compareTo(t2.getValue(cell)) < 0;
+			case EQ: return v1.equals(v2); 
+			case NEQ: return !v1.equals(v2); 
+			case GEQ: return v1.compareTo(v2) >= 0; 
+			case LEQ: return v1.compareTo(v2) <= 0; 
+			case GRE: return v1.compareTo(v2) > 0;
+			case LES: return v1.compareTo(v2) < 0;
 			default: return false;
 		}
 	}
 	
-	public void solveReferences()
+	public void solveReferences(Automaton a)
 	{
-		t1.solveReferences();
-		t2.solveReferences();
+		t1.solveReferences(a);
+		t2.solveReferences(a);
 	}
 	
 	public String toString()

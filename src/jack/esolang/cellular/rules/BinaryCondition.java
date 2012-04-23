@@ -1,6 +1,6 @@
 package jack.esolang.cellular.rules;
 
-import jack.esolang.cellular.Cell;
+import jack.esolang.cellular.*;
 
 public class BinaryCondition implements Condition
 {
@@ -42,10 +42,10 @@ public class BinaryCondition implements Condition
 		}
 	}
 	
-	public void solveReferences()
+	public void solveReferences(Automaton a)
 	{
 		for (Condition c : conds)
-			c.solveReferences();
+			c.solveReferences(a);
 	}
 	
 	public String toString()

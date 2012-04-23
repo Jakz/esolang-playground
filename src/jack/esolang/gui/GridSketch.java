@@ -7,7 +7,9 @@ import processing.core.PApplet;
 
 public class GridSketch extends PApplet
 {
-  public void setup()
+	int lx = -1, ly = -1;
+  
+	public void setup()
   {
   	size(Constants.W,Constants.H);
   	noLoop();
@@ -40,7 +42,7 @@ public class GridSketch extends PApplet
     else if (key == 'r')
     {
     	Automaton a = Automaton.current();
-    	a.reset(a.getType("dead"));
+    	a.reset(a.getDefaultType());
     	redraw();
     }
   }
@@ -66,17 +68,28 @@ public class GridSketch extends PApplet
     	Automaton a = Automaton.current();
     	Cell c = a.get(x, y);
     	
-    	if (c.type.name.equals("dead"))
-    		c.type = a.getType("alive");
+    	if (c.type == a.getLeftType())
+    		c.type = a.getDefaultType();
     	else
-    		c.type = a.getType("dead");
-    	
+    		c.type = a.getLeftType();
+
     	redraw();
     }
     else if (mouseButton == RIGHT)
     {
+    	Automaton a = Automaton.current();
+    	Cell c = a.get(x, y);
     	
+    	if (c.type == a.getRightType())
+    		c.type = a.getDefaultType();
+    	else  	
+    		c.type = a.getRightType();
+
+    	redraw();
     }
+    
+    lx = x;
+    ly = y;
   }
   
   public void mouseMoved()
@@ -86,7 +99,16 @@ public class GridSketch extends PApplet
   
   public void mouseDragged()
   { 	
+    int x = mouseX;
+    int y = mouseY;
+   
+    x /= Constants.cellSize;
+    y = (Constants.H - y) / Constants.cellSize;
+    
+    if (lx == x && ly == y)
+      return;
 
+    mousePressed();
   }
 
   void reset()

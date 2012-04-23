@@ -12,7 +12,7 @@ public class Spec
 		this.info = info;
 	}
 	
-	public void createAutomaton()
+	public Automaton createAutomaton()
 	{
 		Automaton a = new Automaton(Constants.WC,Constants.HC);
 
@@ -20,9 +20,10 @@ public class Spec
 			a.addType(t);
 		
 		for (Type t : types)
-			t.solveReferences();
+			t.solveReferences(a);
 			
-		a.setDefault(a.getType(info.defaultType));
+		a.setDefaults(a.getType(info.defaultType),a.getType(info.leftType),a.getType(info.rightType));
+		return a;
 	}
 	
 	public String toString()

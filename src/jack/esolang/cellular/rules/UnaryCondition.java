@@ -1,6 +1,6 @@
 package jack.esolang.cellular.rules;
 
-import jack.esolang.cellular.Cell;
+import jack.esolang.cellular.*;
 
 public class UnaryCondition implements Condition
 {
@@ -25,10 +25,10 @@ public class UnaryCondition implements Condition
 			return !inner.evaluate(cell);
 	}
 	
-	public void solveReferences()
+	public void solveReferences(Automaton a)
 	{
 		if (inner != null)
-			inner.solveReferences();
+			inner.solveReferences(a);
 	}
 	
 	public String toString()
