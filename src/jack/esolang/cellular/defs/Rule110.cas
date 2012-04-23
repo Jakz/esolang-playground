@@ -1,0 +1,26 @@
+info
+{
+  name rule110;
+  default dead;
+  leftClick alive;
+  rightClick dead;
+}
+
+type alive
+{
+  /*becomes dead when (upleft(alive) && (up(alive) || upright(alive))) || !((upleft(alive) || up(alive)) || upright(alive));*/
+}
+
+type dead
+{
+  becomes alive when upleft(alive) && up(alive) && !upright(alive);
+  becomes alive when upleft(alive) && !up(alive) && upright(alive);
+  becomes alive when !upleft(alive) && up(alive);
+  becomes alive when !upleft(alive) && !up(alive) && upright(alive);
+}
+
+gfx
+{
+  dead { symbol: 'd', fg: rgb(255,255,255), bg: rgb(30,30,30); }
+  alive { symbol: 'a', fg: rgb(255,255,255), bg: rgb(220,220,0); }
+}

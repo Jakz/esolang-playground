@@ -59,7 +59,7 @@ public class AutomataRepository
 			e.printStackTrace();
 		}
 
-		Automaton.setCurrent(automata.get("wireworld"));
+		Automaton.setCurrent(automata.get("rule110"));
 		MainFrame frame = new MainFrame();
 	}
 }
