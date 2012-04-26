@@ -2,8 +2,6 @@ info
 {
   name rule30;
   default dead;
-  leftClick alive;
-  rightClick dead;
 }
 
 type alive

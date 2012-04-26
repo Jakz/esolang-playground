@@ -4,9 +4,9 @@ import jack.esolang.cellular.*;
 
 public class NeighborCountTerm implements Term<Integer>
 {
-	Type type;
+	Category type;
 	
-	public NeighborCountTerm(Type type)
+	public NeighborCountTerm(Category type)
 	{
 		this.type = type;
 	}

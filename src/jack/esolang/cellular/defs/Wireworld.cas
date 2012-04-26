@@ -1,8 +1,6 @@
 info {
   name wireworld;
   default void;
-  leftClick head;
-  rightClick copper;
 }
 
 type void {

@@ -5,10 +5,9 @@ import java.util.*;
 public class Automaton
 {
 	Cell[][] cells;
-	HashMap<String, Type> types;
+	HashMap<String, Category> types;
 	private HashMap<Type, GFXSpec> templates;
 	Type defaultType;
-	Type leftType, rightType;
 	int w;
 	int h;
 	
@@ -36,26 +35,26 @@ public class Automaton
 				cells[i][j] = new Cell(null, i, j);
 			}
 		
-		types = new HashMap<String, Type>();
+		types = new HashMap<String, Category>();
 		templates = new HashMap<Type, GFXSpec>();
 	}
 	
-	public void addType(Type type)
+	public void addType(Category type)
 	{
 		types.put(type.name, type);
 	}
 	
-	public void setDefaults(Type type, Type left, Type right)
+	public void setDefaults(Type type)
 	{
 		defaultType = type;
-		this.leftType = left;
-		this.rightType = right;
 	}
 	
 	public void setTemplates(HashMap<String, GFXSpec> specs)
 	{
 		for (String k : specs.keySet())
-			templates.put(getType(k), specs.get(k));
+		{
+			templates.put((Type)getType(k), specs.get(k));
+		}
 	}
 	
 	public GFXSpec getTemplate(Type t)
@@ -63,26 +62,21 @@ public class Automaton
 		return templates.get(t);
 	}
 	
-	public Type getType(String name)
+	public Category getType(String name)
 	{
 		return types.get(name);
 	}
 
-	public Collection<Type> getTypes()
+	public Category getCategory(String name)
+	{
+		return types.get(name);
+	}
+
+	public Collection<Category> getTypes()
 	{
 		return types.values();
 	}
-	
-	public Type getLeftType()
-	{
-		return leftType;
-	}
-	
-	public Type getRightType()
-	{
-		return rightType;
-	}
-	
+
 	public Type getDefaultType()
 	{
 		return defaultType;
@@ -133,7 +127,7 @@ public class Automaton
 	public String toString()
 	{
 		String s = "Automata \n";
-		for (Type r : types.values())
+		for (Category r : types.values())
 			s += r;
 		return s;
 	}

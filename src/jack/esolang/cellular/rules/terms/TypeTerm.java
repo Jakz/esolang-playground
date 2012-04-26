@@ -20,7 +20,7 @@ public class TypeTerm implements Term<Type>
 	{
 		if (type instanceof TypePlaceholder)
 		{
-			this.type = a.getType(type.name);
+			this.type = (Type)a.getType(type.name);
 		}
 	}
 	

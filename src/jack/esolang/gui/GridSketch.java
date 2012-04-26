@@ -14,17 +14,18 @@ public class GridSketch extends PApplet
   
 	public void setup()
   {
-  	size(Constants.W+200,Constants.H);
+  	size(Constants.W+200,Constants.H,P2D);
   	noLoop();
   	Life.buildLife();
   	
   	selected = Automaton.current().getDefaultType();
-
+  	
+  	textMode(SCREEN);
   	//redraw();
   }
       
   public void draw()
-  {
+  {	
   	background(120);
   	strokeWeight(1.0f);
   	stroke(0);
@@ -44,29 +45,40 @@ public class GridSketch extends PApplet
   public void drawTypes()
   {
   	Automaton a = Automaton.current();
-  	Collection<Type> types = a.getTypes();
+  	Collection<Category> types = a.getTypes();
     
     int c = 0;
-    for (Type t : types)
+    for (Category t : types)
     {
-    	GFXSpec spec = a.getTemplate(t);
-    	strokeWeight(1.0f);
-    	stroke(0);
-    	fill(spec.background);
-    	rect(Constants.W+10,10+c*30,20,20);
-    	
-    	fill(0);
-    	text(t.name,Constants.W+36,25+c*30);
-    	
-    	if (selected == t)
+    	if (t instanceof Type)
     	{
-    		stroke(230,230,0);
-    		strokeWeight(2.0f);
-    		noFill();
-    		rect(Constants.W+8,8+c*30,100,24);
+	    	GFXSpec spec = a.getTemplate((Type)t);
+	    	strokeWeight(1.0f);
+	    	stroke(0);
+	    	fill(spec.background);
+	    	rect(Constants.W+10,10+c*30,20,20);
+	    	
+	    	if (spec.symbol != ' ')
+	    	{
+	    		textAlign(CENTER);
+	    		fill(spec.foreground);
+	    		text(spec.symbol+"",Constants.W+10+11,10+c*30+10+4);
+	    	}
+	    	
+	    	fill(0);
+	    	textAlign(LEFT);
+	    	text(t.name,Constants.W+36,25+c*30);
+	    	
+	    	if (selected == t)
+	    	{
+	    		stroke(230,230,0);
+	    		strokeWeight(2.0f);
+	    		noFill();
+	    		rect(Constants.W+8,8+c*30,100,24);
+	    	}
+	    	
+	    	++c;
     	}
-    	
-    	++c;
     }
   }
 
@@ -95,19 +107,22 @@ public class GridSketch extends PApplet
     		selectedType = 9;
     	
     	Automaton a = Automaton.current();
-    	Collection<Type> types = a.getTypes();
+    	Collection<Category> types = a.getTypes();
     	
     	int c = 0;
-      for (Type t : types)
+      for (Category t : types)
       {
-      	if (c == selectedType)
-      	{
-      		selected = t;
-      		redraw();
-      		return;
+      	if (t instanceof Type)
+      	{     	
+	      	if (c == selectedType)
+	      	{
+	      		selected = (Type)t;
+	      		redraw();
+	      		return;
+	      	}
+	      	
+	      	++c;
       	}
-      	
-      	++c;
       }
     }
   }
@@ -124,19 +139,22 @@ public class GridSketch extends PApplet
     	int selectedType = (mouseY - 10) / 30;
     	
     	Automaton a = Automaton.current();
-    	Collection<Type> types = a.getTypes();
+    	Collection<Category> types = a.getTypes();
     	
     	int c = 0;
-      for (Type t : types)
+      for (Category t : types)
       {
-      	if (c == selectedType)
-      	{
-      		selected = t;
-      		redraw();
-      		return;
+      	if (t instanceof Type)
+      	{     	
+	      	if (c == selectedType)
+	      	{
+	      		selected = (Type)t;
+	      		redraw();
+	      		return;
+	      	}
+	      	
+	      	++c;
       	}
-      	
-      	++c;
       }
     	
     }

@@ -17,6 +17,7 @@ public class eg2{  public static void main(String args [])  {    System.out.
       MainFrame frame = new MainFrame();
       System.out.println(r);      System.out.println("Thank you."); */          }    catch (Exception e)    {      System.out.println("Oops.");      e.printStackTrace();    }  }}PARSER_END(eg2)SKIP :{  " "| "\t"| "\n"| "\r"| < "//" (~[ "\n", "\r" ])*    (      "\n"    | "\r"    | "\r\n"    ) >| < "/*" (~[ "*" ])* "*"    (      ~[ "/" ] (~[ "*" ])* "*"    )*    "/" >}TOKEN : /* LITERALS */{  < INTEGER_LITERAL :    < DECIMAL_LITERAL > ([ "l", "L" ])?  | < HEX_LITERAL > ([ "l", "L" ])?  | < OCTAL_LITERAL > ([ "l", "L" ])?     >| < #DECIMAL_LITERAL : [ "1"-"9" ] ([ "0"-"9" ])* >| < #HEX_LITERAL : "0" [ "x", "X" ] ([ "0"-"9", "a"-"f", "A"-"F" ])+ >| < #OCTAL_LITERAL : "0" ([ "0"-"7" ])* >
 | < TYPE: "type" >
+| < CATEGORY: "category" >
 | < BECOMES: "becomes" >
 | < WHEN: "when" >
 | < GFX: "gfx" >
@@ -35,22 +36,25 @@ public class eg2{  public static void main(String args [])  {    System.out.
 | < UPLEFT: "upleft" >
 | < UPRIGHT: "upright" >
 | < DOWNLEFT: "downleft" >
-| < DOWNRIGHT: "downright" >}TOKEN : /* IDENTIFIERS */{  <CHARACTER :  (< LETTER >| < DIGIT >) >
-| <IDENTIFIER : <LETTER> (<LETTER>|<DIGIT>)* >| < #LETTER : [ "_", "a"-"z", "A"-"Z" ] >| < #DIGIT : [ "0"-"9" ] >}Spec Start() :{Type[] types; SpecInfo info; HashMap<String, GFXSpec> map; }{  info=SpecInfo() types=Types() map=GFXSpecMap() { return new Spec(info,types,map); }}void Expression() :{}{  AdditiveExpression()}void AdditiveExpression() :{}{  MultiplicativeExpression()  (    (      "+"    | "-"    )    MultiplicativeExpression()  )*}void MultiplicativeExpression() :{}{  UnaryExpression()  (    (      "*"    | "/"    | "%"    )    UnaryExpression()  )*}void UnaryExpression() :{}{  "(" Expression() ")"| Identifier()| Integer()}String Identifier() :{ Token s; }{  s=< IDENTIFIER > { return s.image; }}int Integer() :{ Token n; }{  n=< INTEGER_LITERAL > { return Integer.parseInt(n.image); }}
+| < DOWNRIGHT: "downright" >
+| < ISTYPE: ":" >
+| < COMMA: "," >}TOKEN : /* IDENTIFIERS */{  <CHARACTER :  "'"
+      (   (~["'","\\","\n","\r"])
+        | ("\\"
+            ( ["n","t","b","r","f","\\","'","\""]
+            | ["0"-"7"] ( ["0"-"7"] )?
+            | ["0"-"3"] ["0"-"7"] ["0"-"7"]
+            )
+          )
+      )
+      "'"
+  >
+| <IDENTIFIER : <LETTER> (<LETTER>|<DIGIT>)* >| < #LETTER : [ "_", "a"-"z", "A"-"Z" ] >| < #DIGIT : [ "0"-"9" ] >}Spec Start() :{Type[] types; Category[] categories; SpecInfo info; HashMap<String, GFXSpec> map; }{  info=SpecInfo() categories=Categories() types=Types() map=GFXSpecMap() { return new Spec(info,types,categories,map); }}String Identifier() :{ Token s; }{  s=< IDENTIFIER > { return s.image; }}int Integer() :{ Token n; }{  n=< INTEGER_LITERAL > { return Integer.parseInt(n.image); }}
 
-SpecInfo SpecInfo() : { String s, n, l, r; }
-{  < INFO > "{" n=SpecName() s=DefaultType() l=LeftType() r=RightType() "}" { return new SpecInfo(n,s,l,r); }
+SpecInfo SpecInfo() : { String s, n; }
+{  < INFO > "{" n=SpecName() s=DefaultType() "}" { return new SpecInfo(n,s); }
 }
 
-String LeftType() : { String s; }
-{
-  < LEFTCLICK > s=Identifier() ";" { return s; }
-}
-
-String RightType() : { String s; }
-{
-  < RIGHTCLICK > s=Identifier() ";" { return s; }
-}
 String DefaultType() : { String s; }
 {  < DEFAULTTYPE > s=Identifier() ";" { return s; }
 }
@@ -59,19 +63,35 @@ String SpecName() : { String s; }
 {
   < NAME > s=Identifier() ";" { return s; }
 }
+Category[] Categories() : { ArrayList<Category> categories = new ArrayList<Category>(); Category t; }
+{
+  (t=Category() { categories.add(t); } )* { return categories.toArray(new Category[categories.size()]); }
+}
+
 Type[] Types() : { ArrayList<Type> types = new ArrayList<Type>(); Type t; }
 {  (t=Type() { types.add(t); } )* { return types.toArray(new Type[types.size()]); }
 }
-Type Type() : { Rule[] r; String n;}
-{  < TYPE > n=Identifier() "{" r=Rules() "}" { return new Type(n,r); }
+Type Type() : { Rule[] r; String n; List<Category> cats = null; }
+{  < TYPE > n=Identifier() [<ISTYPE > cats=Cats() ] "{" r=Rules() "}" { Type t = new Type(n,r); if (cats != null) t.setCategories(cats); return t; }
+}
+
+List<Category> Cats() : { ArrayList<Category> cats = new ArrayList<Category>(); String i,i2; }
+{  i=Identifier() (< COMMA > i2=Identifier() {cats.add(new TypePlaceholder(i2)); } )* {cats.add(new TypePlaceholder(i)); return cats; }    
+}  
+
+Category Category() : { Rule[] r; String n;}
+{
+  < CATEGORY > n=Identifier() "{" r=Rules() "}" { return new Category(n,r);  }
 }
 
 Rule[] Rules() : { ArrayList<Rule> rules = new ArrayList<Rule>(); Rule r; }
 {  (r=Rule() {rules.add(r); } )* { return rules.toArray(new Rule[rules.size()]); }
 }
 
-Rule Rule() : { String n; Condition c;}
-{  < BECOMES > n=Identifier() < WHEN > c=BCondition() ";" { return new Rule(new TypePlaceholder(n),c); }
+Rule Rule() : { String n; Condition c; int d;}
+{  LOOKAHEAD(2)
+  < BECOMES > n=Identifier() < WHEN > c=BCondition() ";" { return new FixedRule(new TypePlaceholder(n),c); }
+| < BECOMES > d=Direction() < WHEN > c=BCondition() ";" { return new DynamicRule(d,c); }
 }
 
 Condition BCondition() : { ArrayList<Condition> conditions = new ArrayList<Condition>(); Condition u, u2; }
@@ -148,10 +168,10 @@ GFXSpec GFXSpec() : { char s = ' '; Color f = null, b = null; }
 }
 
 char Symbol() : { char c; }
-{  "'" c=Character() "'" { return c; }
+{  c=Character() { return c; }
 }
 
 Color Color() : { int r,g,b; }{  "rgb(" r=Integer() "," g=Integer() "," b=Integer() ")" { return new Color(r,g,b); }
 }
 
-char Character() : { Token c; } { c=<CHARACTER> { return c.image.charAt(0); } }  
+char Character() : { Token c; } { c=<CHARACTER> { return c.image.charAt(1); } }  

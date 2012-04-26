@@ -1,17 +1,24 @@
 info {
-  name life;
+  name test;
   default dead;
 }
 
-type alive {
+category test {
   becomes dead when neighbors(alive) >= 4 || neighbors(alive) <= 1;
 }
 
-type dead {
+category test2 {
   becomes alive when neighbors(alive) == 3;
 }
 
+type alive : test {
+  
+}
+
+type dead : test2 {
+}
+
 gfx {
-  alive { symbol: '*', fg: rgb(255,255,255), bg: rgb(220,220,0); }
+  alive { symbol: '*', fg: rgb(50,50,50), bg: rgb(220,220,0); }
   dead { symbol: ' ', fg: rgb(255,255,255), bg: rgb(30,30,30); }
 }
