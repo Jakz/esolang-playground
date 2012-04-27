@@ -53,6 +53,7 @@ public class Code2D<T> implements Code<T>
 	public void incrPC()
 	{
 		pc.shift(dir);
+		pc.wrap(code.length, code[0].length);
 	}
 	
 	public void setDirection(Direction d)
