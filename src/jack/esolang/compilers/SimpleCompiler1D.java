@@ -5,11 +5,11 @@ import jack.esolang.source.*;
 
 public class SimpleCompiler1D implements Compiler<Character, Code1D<Character>>
 {
-	//Opcodes<Character> opcodes;
+	Set<Character> opcodes;
 	
-	public SimpleCompiler1D()
+	public SimpleCompiler1D(Character[] opcodes)
 	{
-		//this.opcodes = opcodes;
+		this.opcodes = new HashSet<Character>(Arrays.asList(opcodes));
 	}
 
 	public Code1D<Character> compile(String source)
@@ -19,11 +19,9 @@ public class SimpleCompiler1D implements Compiler<Character, Code1D<Character>>
 		for (int i = 0; i < source.length(); ++i)
 		{
 			char c = source.charAt(i);
-			Opcode<Character> op = new Opcode<Character>(c);
-			//if (opcodes.valid(op))
-			{
-				arrayCode.add(op);
-			}
+			
+			if (opcodes.contains(c))
+				arrayCode.add(new Opcode<Character>(c));
 		}
 		
 		Code1D<Character> program = new Code1D<Character>(arrayCode.toArray());

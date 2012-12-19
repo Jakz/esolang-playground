@@ -9,7 +9,7 @@ public class Brainfuck extends Language<Character, Code1D<Character>, FixedTape<
 {
 	public Brainfuck()
 	{
-		super("Brainfuck", 1993, "Urban MŸller", "Jack", new SimpleCompiler1D());
+		super("Brainfuck", 1993, "Urban MŸller", "Jack", new SimpleCompiler1D(new Character[]{'+','-','<','>',',','.','[',']'}));
 	}
 	
 	public void startExecution()

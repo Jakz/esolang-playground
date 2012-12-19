@@ -16,7 +16,7 @@ public class Main
 		//AutomataRepository repo = new AutomataRepository();
 		//repo.searchAndLoad();
 		
-		/*String helloWorld = 
+		String helloWorld = 
 			"++++++++++"+
 			"["+
 			"   >+++++++>++++++++++>+++>+<<<<-"+
@@ -40,12 +40,12 @@ public class Main
 		
 		Brainfuck bf = new Brainfuck();
 		
-		Code1D<Character> code = Compilers.compileCharProgram(rot13, bf);
+		Code1D<Character> code = bf.compile(helloWorld);
 		bf.setCode(code);
 		bf.setMemory(new FixedTape<Integer>(1000, Builder.intBuilder()));
 		bf.setStdin(new StringStdin("Antani"));
 		bf.setStdout(new PrintStdout<Character>());
-		bf.run();*/
+		bf.run();
 		
 		/*String helloWorld = 
 			">              v\n"+
@@ -70,7 +70,7 @@ public class Main
 		bf.setStdout(new PrintStdout<String>());
 		bf.run();*/
 		
-		Lexer<Byte> lexer = new Lexer();
-		lexer.tokenize("[a;1=][2f;!]# ");
+		//Lexer<Byte> lexer = new Lexer();
+		//lexer.tokenize("[a;1=][2f;!]# ");
 	}
 }
