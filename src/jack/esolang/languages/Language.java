@@ -15,14 +15,16 @@ public abstract class Language<T, C extends Code<T>, M, I, O>
 	I stdin;
 	O stdout;
 	
-	Compiler<T> compiler;
+	Compiler<?,C> compiler;
 	
-	Language(String name, int year, String author, String coder)
+	Language(String name, int year, String author, String coder, Compiler<?,C> compiler)
 	{
 		this.name = name;
 		this.year = year;
 		this.author = author;
 		this.coder = coder;
+		
+		this.compiler = compiler;
 	}
 	
 	public final void run()
@@ -64,4 +66,9 @@ public abstract class Language<T, C extends Code<T>, M, I, O>
 	public abstract void endedExecution();
 	
 	public abstract void execute(Opcode<T> opcode);
+	
+	public C compile(String source)
+	{
+		return compiler.compile(source);
+	}
 }

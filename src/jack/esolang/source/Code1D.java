@@ -5,13 +5,13 @@ public class Code1D<T> implements Code<T>
 	private Object[] code;
 	private int pc;
 	
-	Code1D(int size)
+	public Code1D(int size)
 	{
 		code = new Object[size];
 		pc = 0;
 	}
 	
-	Code1D(Object[] code)
+	public Code1D(Object[] code)
 	{
 		this.code = code;
 		pc = 0;

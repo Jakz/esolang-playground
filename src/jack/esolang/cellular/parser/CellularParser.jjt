@@ -3,7 +3,7 @@
  */options{  JDK_VERSION = "1.5";
   MULTI = true;  static = false;}PARSER_BEGIN(eg2)package jack.esolang.cellular.parser;
 
-import jack.esolang.gui.*;
+import jack.esolang.cellular.gui.*;
 import jack.esolang.cellular.*;
 import jack.esolang.cellular.rules.*;
 import jack.esolang.cellular.rules.terms.*;

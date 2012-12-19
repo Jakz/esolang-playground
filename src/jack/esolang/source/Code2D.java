@@ -9,14 +9,14 @@ public class Code2D<T> implements Code<T>
 	private Direction dir;
 	private boolean finished;
 	
-	Code2D(int width, int height)
+	public Code2D(int width, int height)
 	{
 		code = new Object[width][height];
 		pc = new Position();
 		dir = Direction.RIGHT;
 	}
 	
-	Code2D(Opcode<T>[][] code)
+	public Code2D(Opcode<T>[][] code)
 	{
 		this.code = code;
 		pc = new Position();

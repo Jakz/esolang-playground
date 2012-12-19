@@ -1,7 +1,6 @@
 package jack.esolang;
 
 import jack.esolang.cellular.defs.*;
-import jack.esolang.gui.*;
 
 import jack.esolang.languages.*;
 import jack.esolang.source.*;
@@ -63,7 +62,7 @@ public class Main
 		
 		Befunge93 bf = new Befunge93();
 		
-		Code2D<Character> code = Compilers.compileChar2DProgram(helloWorld, bf);
+		Code2D<Character> code = bf.compile(helloWorld);
 		//System.out.println(code);
 		bf.setCode(code);
 		bf.setMemory(new Stack<Integer>());
@@ -72,6 +71,6 @@ public class Main
 		bf.run();*/
 		
 		Lexer<Byte> lexer = new Lexer();
-		lexer.tokenize("[a;1=][2f;!]# \"");
+		lexer.tokenize("[a;1=][2f;!]# ");
 	}
 }

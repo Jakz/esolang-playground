@@ -5,6 +5,7 @@ import jack.esolang.io.*;
 import jack.esolang.memory.*;
 import jack.esolang.source.*;
 import jack.esolang.common.*;
+import jack.esolang.compilers.*;
 
 public class Befunge93 extends Language<Character, Code2D<Character>, Stack<Integer>, StringStdin, PrintStdout<String>>
 {
@@ -12,7 +13,7 @@ public class Befunge93 extends Language<Character, Code2D<Character>, Stack<Inte
 	
 	public Befunge93()
 	{
-		super("Befunge", 1993, "Chris Pressey", "Jack");
+		super("Befunge", 1993, "Chris Pressey", "Jack", new SimpleCompiler2D());
 	}
 	
 	public void startExecution()
