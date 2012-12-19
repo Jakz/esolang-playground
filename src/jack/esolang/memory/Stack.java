@@ -6,23 +6,32 @@ public class Stack<T>
 {
 	LinkedList<T> stack;
 	
-	Stack()
+	public Stack()
 	{
 		stack = new LinkedList<T>();
 	}
 	
-	void push(T item)
+	public void push(T item)
 	{
 		stack.addFirst(item);
 	}
 	
-	T pop()
+	public T pop()
 	{
 		return stack.removeFirst();
 	}
 	
-	T peek()
+	public T peek()
 	{
 		return stack.pollFirst();
+	}
+	
+	public String toString()
+	{
+		String s = "";
+		for (T t : stack)
+			s += t+" ";
+		
+		return s;
 	}
 }

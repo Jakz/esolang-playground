@@ -1,4 +1,4 @@
-package jack.esolang.gui;
+package jack.esolang.cellular.gui;
 
 import jack.esolang.Main;
 import jack.esolang.cellular.*;

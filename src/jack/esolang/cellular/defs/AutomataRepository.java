@@ -2,8 +2,8 @@ package jack.esolang.cellular.defs;
 
 import jack.esolang.Console;
 import jack.esolang.cellular.*;
+import jack.esolang.cellular.gui.MainFrame;
 import jack.esolang.cellular.parser.*;
-import jack.esolang.gui.MainFrame;
 
 import java.io.*;
 import java.util.*;

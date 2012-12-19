@@ -2,10 +2,10 @@ package jack.esolang.common;
 
 public enum Direction
 {
-	UP(0,-1,"up"),
-	RIGHT(1,0,"right"),
-	DOWN(0,1,"down"),
-	LEFT(1,0,"left");
+	UP(-1,0,"up"),
+	RIGHT(0,1,"right"),
+	DOWN(1,0,"down"),
+	LEFT(0,-1,"left");
 	
 	public final int x, y;
 	public final String name;

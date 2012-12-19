@@ -1,6 +1,7 @@
 package jack.esolang.languages;
 
 import jack.esolang.source.*;
+import jack.esolang.compilers.Compiler;
 
 public abstract class Language<T, C extends Code<T>, M, I, O>
 {
@@ -13,6 +14,8 @@ public abstract class Language<T, C extends Code<T>, M, I, O>
 	M memory;
 	I stdin;
 	O stdout;
+	
+	Compiler<T> compiler;
 	
 	Language(String name, int year, String author, String coder)
 	{

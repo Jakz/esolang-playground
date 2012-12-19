@@ -16,14 +16,14 @@ public class Code2D<T> implements Code<T>
 		dir = Direction.RIGHT;
 	}
 	
-	Code2D(Object[][] code)
+	Code2D(Opcode<T>[][] code)
 	{
 		this.code = code;
 		pc = new Position();
 		dir = Direction.RIGHT;
 	}
 	
-	void set(int i, int j, Opcode<T> op)
+	public void set(int i, int j, Opcode<T> op)
 	{
 		code[i][j] = op;
 	}
@@ -61,6 +61,11 @@ public class Code2D<T> implements Code<T>
 		this.dir = d;
 	}
 	
+	public Direction direction()
+	{
+		return dir;
+	}
+	
 	public void setPC(Position p)
 	{
 		pc.set(p);
@@ -76,6 +81,11 @@ public class Code2D<T> implements Code<T>
 		return finished;
 	}
 	
+	public void finish()
+	{
+		finished = true;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public String toString()
 	{
@@ -83,7 +93,7 @@ public class Code2D<T> implements Code<T>
 		
 		for (int i = 0; i < code.length; ++i)
 		{
-			for (int j = 0; j < code.length; ++j)
+			for (int j = 0; j < code[0].length; ++j)
 			{
 				s += ((Opcode<T>)code[i][j]).v.toString();
 			}

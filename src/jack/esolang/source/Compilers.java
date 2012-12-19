@@ -1,5 +1,6 @@
 package jack.esolang.source;
 
+import jack.esolang.Console;
 import jack.esolang.languages.*;
 import java.util.*;
 
@@ -29,21 +30,46 @@ public class Compilers
 	{
 		Opcodes<Character> opcodes = language.opcodes();
 		ArrayList<ArrayList<Opcode<Character>>> arrayCode = new ArrayList<ArrayList<Opcode<Character>>>();
-		int maxLineLength = 0;
+		
+		ArrayList<Opcode<Character>> row = new ArrayList<Opcode<Character>>();
+		
+		int maxRowLength = 0;
 
-		/*for (int i = 0; i < source.length(); ++i)
+		for (int i = 0; i < source.length(); ++i)
 		{
 			char c = source.charAt(i);
-			Opcode<Character> op = new Opcode<Character>(c);
-			if (opcodes.valid(op))
+			
+			if (c == '\n')
 			{
-				arrayCode.add(op);
+				if (row.size() > maxRowLength)
+					maxRowLength = row.size();
+				
+				arrayCode.add(row);
+				row = new ArrayList<Opcode<Character>>();
+				continue;
+			}
+			
+			Opcode<Character> op = new Opcode<Character>(c);
+			row.add(op);
+		}
+		
+		Opcode<Character>[][] rows = new Opcode[arrayCode.size()][maxRowLength];
+		
+		Console.i.debug("Compiling a 2D source of size "+arrayCode.size()+"x"+maxRowLength);
+		
+		for (int i = 0; i < rows.length; ++i)
+		{
+			for (int j = 0; j < maxRowLength; ++j)
+			{
+				if (j < arrayCode.get(i).size())
+					rows[i][j] = arrayCode.get(i).get(j);
+				else
+					rows[i][j] = new Opcode<Character>(' ');
 			}
 		}
 		
-		Code1D<Character> program = new Code1D<Character>(arrayCode.toArray());
+		Code2D<Character> program = new Code2D<Character>(rows);
 		
-		return program;*/
-		return null;
+		return program;
 	}
 }

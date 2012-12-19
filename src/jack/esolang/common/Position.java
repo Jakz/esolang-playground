@@ -36,7 +36,7 @@ public class Position
 	
 	public void wrap(int w, int h)
 	{
-		if (x >= w)
+		/*if (x >= w)
 			x %= w;
 		else if (x < 0)
 			x += w;
@@ -44,6 +44,6 @@ public class Position
 		if (y >= w)
 			y %= h;
 		else if (y < 0)
-			y += h;
+			y += h;*/
 	}
 }

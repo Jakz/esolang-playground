@@ -1,4 +1,4 @@
-package jack.esolang.gui;
+package jack.esolang.cellular.gui;
 
 import java.awt.BorderLayout;
 import javax.swing.JFrame;

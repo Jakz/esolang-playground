@@ -7,14 +7,15 @@ import jack.esolang.languages.*;
 import jack.esolang.source.*;
 import jack.esolang.memory.*;
 import jack.esolang.io.*;
+import jack.esolang.lexer.*;
 
 public class Main
 {
 	public static void main(String[] args)
 	{
 		//MainFrame mainFrame = new MainFrame();
-		AutomataRepository repo = new AutomataRepository();
-		repo.searchAndLoad();
+		//AutomataRepository repo = new AutomataRepository();
+		//repo.searchAndLoad();
 		
 		/*String helloWorld = 
 			"++++++++++"+
@@ -46,20 +47,31 @@ public class Main
 		bf.setStdin(new StringStdin("Antani"));
 		bf.setStdout(new PrintStdout<Character>());
 		bf.run();*/
-	}
-	
-	public static void foo(String[] array)
-	{
-		String string = new String();
-		for (int i = 0; i < array.length; i++) {
-			
-		}
-	}
-	
-	public static void foo2(String[] array)
-	{
-		for (int i = 0; i < array.length; i++) {
-			String string = new String();
-		}
+		
+		/*String helloWorld = 
+			">              v\n"+
+			"v  ,,,,,\"Hello\"<\n"+
+			">48*,          v\n"+
+			"v,,,,,,\"World!\"<\n"+
+			">25*,@          \n";*/
+		
+		/*String helloWorld = 
+			"2>:3g\" \"-!v\\  g30          <                                                    \n"+
+			" |!`\"O\":+1_:.:03p>03g+:\"O\"`|                                                    \n"+
+			" @               ^  p3\\\" \":<                                                    \n"+
+			"2 234567890123456789012345678901234567890123456789012345678901234567890123456789\n";
+		
+		Befunge93 bf = new Befunge93();
+		
+		Code2D<Character> code = Compilers.compileChar2DProgram(helloWorld, bf);
+		//System.out.println(code);
+		bf.setCode(code);
+		bf.setMemory(new Stack<Integer>());
+		bf.setStdin(new StringStdin(""));
+		bf.setStdout(new PrintStdout<String>());
+		bf.run();*/
+		
+		Lexer<Byte> lexer = new Lexer();
+		lexer.tokenize("[a;1=][2f;!]# \"");
 	}
 }

@@ -8,4 +8,9 @@ public class Console
 	{
 		System.out.println(text);
 	}
+	
+	public void debug(String text)
+	{
+		System.out.println(text);
+	}
 }
