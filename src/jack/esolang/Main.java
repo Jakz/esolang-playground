@@ -3,6 +3,7 @@ package jack.esolang;
 import jack.esolang.cellular.defs.*;
 
 import jack.esolang.languages.*;
+import jack.esolang.languages.simple.*;
 import jack.esolang.source.*;
 import jack.esolang.memory.*;
 import jack.esolang.io.*;
@@ -16,7 +17,7 @@ public class Main
 		//AutomataRepository repo = new AutomataRepository();
 		//repo.searchAndLoad();
 		
-		String helloWorld = 
+		/*String helloWorld = 
 			"++++++++++"+
 			"["+
 			"   >+++++++>++++++++++>+++>+<<<<-"+
@@ -45,7 +46,7 @@ public class Main
 		bf.setMemory(new FixedTape<Integer>(1000, Builder.intBuilder()));
 		bf.setStdin(new StringStdin("Antani"));
 		bf.setStdout(new PrintStdout<Character>());
-		bf.run();
+		bf.run();*/
 		
 		/*String helloWorld = 
 			">              v\n"+
@@ -54,7 +55,7 @@ public class Main
 			"v,,,,,,\"World!\"<\n"+
 			">25*,@          \n";*/
 		
-		/*String helloWorld = 
+		String helloWorld = 
 			"2>:3g\" \"-!v\\  g30          <                                                    \n"+
 			" |!`\"O\":+1_:.:03p>03g+:\"O\"`|                                                    \n"+
 			" @               ^  p3\\\" \":<                                                    \n"+
@@ -68,7 +69,7 @@ public class Main
 		bf.setMemory(new Stack<Integer>());
 		bf.setStdin(new StringStdin(""));
 		bf.setStdout(new PrintStdout<String>());
-		bf.run();*/
+		bf.run();
 		
 		//Lexer<Byte> lexer = new Lexer();
 		//lexer.tokenize("[a;1=][2f;!]# ");

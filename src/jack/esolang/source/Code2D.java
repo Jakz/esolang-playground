@@ -4,26 +4,26 @@ import jack.esolang.common.*;
 
 public class Code2D<T> implements Code<T>
 {
-	private Object[][] code;
+	private T[][] code;
 	private Position pc;
 	private Direction dir;
 	private boolean finished;
 	
 	public Code2D(int width, int height)
 	{
-		code = new Object[width][height];
+		code = (T[][])new Object[width][height];
 		pc = new Position();
 		dir = Direction.RIGHT;
 	}
 	
-	public Code2D(Opcode<T>[][] code)
+	public Code2D(T[][] code)
 	{
 		this.code = code;
 		pc = new Position();
 		dir = Direction.RIGHT;
 	}
 	
-	public void set(int i, int j, Opcode<T> op)
+	public void set(int i, int j, T op)
 	{
 		code[i][j] = op;
 	}
@@ -32,14 +32,13 @@ public class Code2D<T> implements Code<T>
 	{
 		return code.length;
 	}
-	
-	@SuppressWarnings("unchecked")
-	public Opcode<T> get(int i, int j)
+
+	public T get(int i, int j)
 	{
-		return (Opcode<T>)code[i][j];
+		return code[i][j];
 	}
 	
-	public Opcode<T> get()
+	public T get()
 	{
 		return get(pc.x,pc.y);
 	}
@@ -86,7 +85,6 @@ public class Code2D<T> implements Code<T>
 		finished = true;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public String toString()
 	{
 		String s = "";
@@ -95,7 +93,7 @@ public class Code2D<T> implements Code<T>
 		{
 			for (int j = 0; j < code[0].length; ++j)
 			{
-				s += ((Opcode<T>)code[i][j]).v.toString();
+				s += code[i][j].toString();
 			}
 			s += "\n";
 		}

@@ -14,17 +14,17 @@ public class SimpleCompiler1D implements Compiler<Character, Code1D<Character>>
 
 	public Code1D<Character> compile(String source)
 	{
-		List<Opcode<Character>> arrayCode = new ArrayList<Opcode<Character>>();
+		List<Character> arrayCode = new ArrayList<Character>();
 
 		for (int i = 0; i < source.length(); ++i)
 		{
 			char c = source.charAt(i);
 			
 			if (opcodes.contains(c))
-				arrayCode.add(new Opcode<Character>(c));
+				arrayCode.add(c);
 		}
 		
-		Code1D<Character> program = new Code1D<Character>(arrayCode.toArray());
+		Code1D<Character> program = new Code1D<Character>(arrayCode.toArray(new Character[arrayCode.size()]));
 		
 		return program;
 	}

@@ -15,9 +15,9 @@ public class SimpleCompiler2D implements Compiler<Character, Code2D<Character>>
 	public Code2D<Character> compile(String source)
 	{
 		//Opcodes<Character> opcodes = language.opcodes();
-		ArrayList<ArrayList<Opcode<Character>>> arrayCode = new ArrayList<ArrayList<Opcode<Character>>>();
+		ArrayList<ArrayList<Character>> arrayCode = new ArrayList<ArrayList<Character>>();
 		
-		ArrayList<Opcode<Character>> row = new ArrayList<Opcode<Character>>();
+		ArrayList<Character> row = new ArrayList<Character>();
 		
 		int maxRowLength = 0;
 
@@ -31,15 +31,14 @@ public class SimpleCompiler2D implements Compiler<Character, Code2D<Character>>
 					maxRowLength = row.size();
 				
 				arrayCode.add(row);
-				row = new ArrayList<Opcode<Character>>();
+				row = new ArrayList<Character>();
 				continue;
 			}
 			
-			Opcode<Character> op = new Opcode<Character>(c);
-			row.add(op);
+			row.add(c);
 		}
 		
-		Opcode<Character>[][] rows = new Opcode[arrayCode.size()][maxRowLength];
+		Character[][] rows = new Character[arrayCode.size()][maxRowLength];
 		
 		Console.i.debug("Compiling a 2D source of size "+arrayCode.size()+"x"+maxRowLength);
 		
@@ -50,7 +49,7 @@ public class SimpleCompiler2D implements Compiler<Character, Code2D<Character>>
 				if (j < arrayCode.get(i).size())
 					rows[i][j] = arrayCode.get(i).get(j);
 				else
-					rows[i][j] = new Opcode<Character>(' ');
+					rows[i][j] = ' ';
 			}
 		}
 		

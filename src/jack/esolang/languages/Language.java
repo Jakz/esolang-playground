@@ -10,14 +10,14 @@ public abstract class Language<T, C extends Code<T>, M, I, O>
 	public final String author;
 	public final String coder;
 	
-	C code;
-	M memory;
-	I stdin;
-	O stdout;
+	public C code;
+	public M memory;
+	public I stdin;
+	public O stdout;
 	
 	Compiler<?,C> compiler;
 	
-	Language(String name, int year, String author, String coder, Compiler<?,C> compiler)
+	public Language(String name, int year, String author, String coder, Compiler<?,C> compiler)
 	{
 		this.name = name;
 		this.year = year;
@@ -55,17 +55,15 @@ public abstract class Language<T, C extends Code<T>, M, I, O>
 		this.stdout = stdout;
 	}
 	
-	final C code() { return code; }
-	final M memory() { return memory; }
-	final I stdin() { return stdin; }
-	final O stdout() { return stdout; }
-	
-	public abstract Opcodes<T> opcodes();
-	
+	final public C code() { return code; }
+	final public M memory() { return memory; }
+	final public I stdin() { return stdin; }
+	final public O stdout() { return stdout; }
+
 	public abstract void startExecution();
 	public abstract void endedExecution();
 	
-	public abstract void execute(Opcode<T> opcode);
+	public abstract void execute(T opcode);
 	
 	public C compile(String source)
 	{

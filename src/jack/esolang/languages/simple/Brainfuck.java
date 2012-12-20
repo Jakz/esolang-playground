@@ -1,6 +1,7 @@
-package jack.esolang.languages;
+package jack.esolang.languages.simple;
 
 import jack.esolang.source.*;
+import jack.esolang.languages.Language;
 import jack.esolang.memory.*;
 import jack.esolang.compilers.*;
 import jack.esolang.io.*;
@@ -22,13 +23,13 @@ public class Brainfuck extends Language<Character, Code1D<Character>, FixedTape<
 		
 	}
 	
-	public void execute(Opcode<Character> opcode)
+	public void execute(Character opcode)
 	{
 		//memory().dump(20);
 		//code().dump();
 		//System.out.println("Executing: "+opcode.v);
 		
-		switch (opcode.v)
+		switch (opcode)
 		{
 			case '>': { memory().advance(); break; }
 			case '<': { memory().recede(); break; }
@@ -45,7 +46,7 @@ public class Brainfuck extends Language<Character, Code1D<Character>, FixedTape<
 					
 					while (true)
 					{
-						char c = code().get(pc).v;
+						char c = code().get(pc);
 						
 						if (c == '[')
 							++scopes;
@@ -71,7 +72,7 @@ public class Brainfuck extends Language<Character, Code1D<Character>, FixedTape<
 					
 					while (true)
 					{
-						char c = code().get(pc).v;
+						char c = code().get(pc);
 						
 						if (c == ']')
 							++scopes;
@@ -89,21 +90,9 @@ public class Brainfuck extends Language<Character, Code1D<Character>, FixedTape<
 				break;
 			}
 			
-			default: throw new jack.esolang.exceptions.UnsupportedOpcodeException(name, opcode.v.toString());
+			default: throw new jack.esolang.exceptions.UnsupportedOpcodeException(name, opcode.toString());
 		}
 			
 		code().incrPC();
-	}
-	
-	public Opcodes<Character> opcodes()
-	{
-		Opcodes<Character> opcodes = new Opcodes<Character>(true);
-		
-		char[] chars = {'>', '<', '+', '-', '[', ']', '.', ','};	
-		
-		for (char c : chars)
-			opcodes.add(new Opcode<Character>(c));
-		
-		return opcodes;
 	}
 }

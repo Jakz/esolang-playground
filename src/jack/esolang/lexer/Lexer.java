@@ -19,9 +19,9 @@ public class Lexer<T>
 		buffer = new StringBuilder();
 		regexes = new LinkedList<LexerRule>();
 		
-		addRule(new LexerRule("[0-9]+", 0, TokenBuilder.INTEGER));
+		addRule(new LexerRule(RegexLibrary.INTEGER_SIMPLE, 0, TokenBuilder.INTEGER));
 		addRule(new LexerRule("\"[^\"]*\"", 1, TokenBuilder.STRING));
-		addRule(new LexerRule("\\ +", 2, TokenBuilder.DUMMY));
+		addRule(new LexerRule(RegexLibrary.WHITE_SPACE, 2, TokenBuilder.DUMMY));
 		addRule(new LexerRule("\\[",3, TokenBuilder.OPCODE));
 		addRule(new LexerRule("\\]",3, TokenBuilder.OPCODE));
 		addRule(new LexerRule("[^\"]", 3, TokenBuilder.OPCODE));

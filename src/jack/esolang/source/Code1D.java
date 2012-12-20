@@ -2,22 +2,22 @@ package jack.esolang.source;
 
 public class Code1D<T> implements Code<T>
 {
-	private Object[] code;
+	private T[] code;
 	private int pc;
 	
 	public Code1D(int size)
 	{
-		code = new Object[size];
+		code = (T[])new Object[size];
 		pc = 0;
 	}
 	
-	public Code1D(Object[] code)
+	public Code1D(T[] code)
 	{
 		this.code = code;
 		pc = 0;
 	}
 	
-	void set(int i, Opcode<T> op)
+	void set(int i, T op)
 	{
 		code[i] = op;
 	}
@@ -27,13 +27,12 @@ public class Code1D<T> implements Code<T>
 		return code.length;
 	}
 	
-	@SuppressWarnings("unchecked")
-	public Opcode<T> get(int i)
+	public T get(int i)
 	{
-		return (Opcode<T>)code[i];
+		return code[i];
 	}
 	
-	public Opcode<T> get()
+	public T get()
 	{
 		return get(pc);
 	}
@@ -74,7 +73,7 @@ public class Code1D<T> implements Code<T>
 		String s = "";
 		
 		for (int i = 0; i < code.length; ++i)
-			s += ((Opcode<T>)code[i]).v.toString();
+			s += code[i].toString();
 		
 		return s;
 	}
@@ -85,7 +84,7 @@ public class Code1D<T> implements Code<T>
 		{
 			if (pc+i < code.length)
 			{
-				System.out.print(get(i+pc).v);
+				System.out.print(get(i+pc));
 			}
 		}
 		
