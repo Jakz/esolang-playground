@@ -1,14 +1,13 @@
 package jack.esolang.languages.simple;
 
 import jack.esolang.io.*;
-import jack.esolang.io.*;
-import jack.esolang.languages.Language;
+import jack.esolang.languages.*;
 import jack.esolang.memory.*;
 import jack.esolang.source.*;
 import jack.esolang.common.*;
 import jack.esolang.compilers.*;
 
-public class Befunge93 extends Language<Character, Code2D<Character>, Stack<Integer>, StringStdin, PrintStdout<String>>
+public class Befunge93 extends SimpleLanguage<Code2D<Character>, Stack<Integer>, StringStdin, PrintStdout<String>>
 {
 	boolean stringMode = false;
 	

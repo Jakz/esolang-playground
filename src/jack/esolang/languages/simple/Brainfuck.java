@@ -1,12 +1,12 @@
 package jack.esolang.languages.simple;
 
 import jack.esolang.source.*;
-import jack.esolang.languages.Language;
+import jack.esolang.languages.*;
 import jack.esolang.memory.*;
 import jack.esolang.compilers.*;
 import jack.esolang.io.*;
 
-public class Brainfuck extends Language<Character, Code1D<Character>, FixedTape<Integer>, StringStdin, PrintStdout<Character>>
+public class Brainfuck extends SimpleLanguage<Code1D<Character>, FixedTape<Integer>, StringStdin, PrintStdout<Character>>
 {
 	public Brainfuck()
 	{

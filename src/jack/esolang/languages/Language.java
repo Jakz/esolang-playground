@@ -3,7 +3,7 @@ package jack.esolang.languages;
 import jack.esolang.source.*;
 import jack.esolang.compilers.Compiler;
 
-public abstract class Language<T, C extends Code<T>, M, I, O>
+abstract class Language<T, C extends Code<T>, M, I, O>
 {
 	public final String name;
 	public final int year;
@@ -27,13 +27,7 @@ public abstract class Language<T, C extends Code<T>, M, I, O>
 		this.compiler = compiler;
 	}
 	
-	public final void run()
-	{
-		while (!code.finished())
-		{
-			this.execute(code.get());
-		}
-	}
+	public abstract void run();
 	
 	public final void setCode(C code)
 	{
@@ -62,8 +56,6 @@ public abstract class Language<T, C extends Code<T>, M, I, O>
 
 	public abstract void startExecution();
 	public abstract void endedExecution();
-	
-	public abstract void execute(T opcode);
 	
 	public C compile(String source)
 	{
