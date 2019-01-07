@@ -15,7 +15,7 @@ public class FixedRule implements Rule
 	
 	public boolean applyOnCell(Cell cell)
 	{
-		if (condition.evaluate(cell))
+		if (condition.compile().test(cell))
 		{
 			cell.nextType = type;
 			return true;

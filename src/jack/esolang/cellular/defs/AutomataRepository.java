@@ -41,8 +41,8 @@ public class AutomataRepository
 			for (File f : specs)
 			{
 				InputStream is = new FileInputStream(f);
-				eg2 parser = new eg2(is);
-				Spec r = parser.Start();
+				//eg2 parser = new eg2(is);
+				Spec r = null;//parser.Start();
 	      
 				Automaton a = r.createAutomaton();
 				a.reset();

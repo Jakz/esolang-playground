@@ -1,5 +1,7 @@
 package jack.esolang.cellular.rules;
 
+import java.util.function.Predicate;
+
 import jack.esolang.cellular.*;
 
 public class UnaryCondition implements Condition
@@ -26,13 +28,14 @@ public class UnaryCondition implements Condition
 		this.op = op;
 	}
 	
-	public boolean evaluate(Cell cell)
+	@Override
+	public Predicate<Cell> compile()
 	{
-		switch (op)
-		{
-			case NOT: return !inner.evaluate(cell);
-			default: return false;
-		}
+	  switch (op)
+	  {
+	    case NOT: return Predicate.not(inner.compile());
+	    default: return inner.compile();
+	  }
 	}
 	
 	public void solveReferences(Automaton a)

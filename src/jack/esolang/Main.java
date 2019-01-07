@@ -1,7 +1,10 @@
 package jack.esolang;
 
+import jack.esolang.cellular.Automaton;
+import jack.esolang.cellular.Life;
+import jack.esolang.cellular.Spec;
 import jack.esolang.cellular.defs.*;
-
+import jack.esolang.cellular.gui.MainFrame;
 import jack.esolang.languages.*;
 import jack.esolang.languages.simple.*;
 import jack.esolang.source.*;
@@ -13,7 +16,16 @@ public class Main
 {
 	public static void main(String[] args)
 	{
-		//MainFrame mainFrame = new MainFrame();
+	  Spec spec = Life.buildLife();
+	  Automaton a = spec.createAutomaton();
+	  a.reset();
+	  Automaton.setCurrent(a);
+	  new MainFrame(); 
+	  
+	  if (true)
+	    return;
+	  
+	  //MainFrame mainFrame = new MainFrame();
 		//AutomataRepository repo = new AutomataRepository();
 		//repo.searchAndLoad();
 		

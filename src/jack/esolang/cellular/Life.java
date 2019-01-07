@@ -4,11 +4,58 @@ import jack.esolang.cellular.rules.*;
 import jack.esolang.cellular.rules.terms.*;
 import jack.esolang.cellular.rules.terms.Number;
 
+import static jack.esolang.cellular.rules.Condition.*;
+import static jack.esolang.cellular.rules.terms.Term.*;
+
+import java.awt.Color;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class Life
 {
-	public static void buildLife()
-	{
-
+	public static Spec buildLife()
+  	{
+	  final SpecInfo info = new SpecInfo("Life", "dead");
+  
+      final Type dead = new Type("dead");
+      final Type alive = new Type("alive");
+      
+      Rule aliveRule = Rule.changeType(dead, 
+          or(
+              geq(
+                  neighborCount(alive), 
+                  number(4)
+              ),
+              leq(
+                  neighborCount(alive),
+                  number(1)
+              )
+          )
+      );
+      
+      Rule deadRule = Rule.changeType(alive, 
+          eq(
+              neighborCount(alive),
+              number(3)
+          )         
+      );
+      
+      dead.addRule(deadRule);
+      alive.addRule(aliveRule);
+      
+       return new Spec(
+           info,
+           new Type[] { dead, alive },
+           new Category[] { },
+           Map.of("dead", new GFXSpec(' ', new Color(255, 255, 255), new Color(30, 30, 30)),
+                 "alive", new GFXSpec('*', new Color(255, 255, 255), new Color(220, 220, 0))
+               
+               )
+           );
+           
+           
+           
 	}
 	
 	/*public static void buildRule30()

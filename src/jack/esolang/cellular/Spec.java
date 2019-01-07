@@ -1,6 +1,7 @@
 package jack.esolang.cellular;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class Spec
 {
@@ -8,9 +9,9 @@ public class Spec
 	public SpecInfo info;
 	public Type[] types;
 	public Category[] categories;
-	public final HashMap<String, GFXSpec> templates;
+	public final Map<String, GFXSpec> templates;
 	
-	public Spec(SpecInfo info, Type[] types, Category[] categories, HashMap<String, GFXSpec> templates)
+	public Spec(SpecInfo info, Type[] types, Category[] categories, Map<String, GFXSpec> templates)
 	{
 		this.types = types;
 		this.categories = categories;

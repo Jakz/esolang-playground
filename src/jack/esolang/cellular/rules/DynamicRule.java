@@ -15,7 +15,7 @@ public class DynamicRule implements Rule
 	
 	public boolean applyOnCell(Cell cell)
 	{
-		if (condition.evaluate(cell))
+		if (condition.compile().test(cell))
 		{
 			Cell ncell = Automaton.current().get(cell.x+Constants.dirs[direction][0], cell.y+Constants.dirs[direction][1]);
 			if (ncell != null)

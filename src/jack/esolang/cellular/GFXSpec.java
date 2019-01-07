@@ -9,40 +9,45 @@ import java.awt.Color;
  */
 public class GFXSpec
 {
-	public final char symbol;
-	public final int foreground;
-	public final int background;
-	
-	GFXSpec(char symbol)
-	{
-		this.symbol = symbol;
-		this.foreground = Color.black.getRGB();
-		this.background = Color.white.getRGB();
-	}
-	
-	public GFXSpec(char symbol, Color foreground, Color background)
-	{
-		this.symbol = symbol;
-		this.foreground = foreground.getRGB();
-		this.background = background.getRGB();
-	}
-	
-	public GFXSpec(char symbol, Color background)
-	{
-		this.symbol = symbol;
-		this.foreground = Color.white.getRGB();
-		this.background = background.getRGB();
-	}
-	
-	GFXSpec(Color background)
-	{
-		this.symbol = ' ';
-		this.background = background.getRGB();
-		this.foreground = Color.black.getRGB();
-	}
-	
-	public String toString()
-	{
-		return "GFXSpec("+symbol+", "+new Color(foreground,false)+", "+new Color(background,false)+")";
-	}
+  public final char symbol;
+  public final int foreground;
+  public final int background;
+
+  GFXSpec(char symbol)
+  {
+    this.symbol = symbol;
+    this.foreground = Color.black.getRGB();
+    this.background = Color.white.getRGB();
+  }
+
+  public GFXSpec(char symbol, Color foreground, Color background)
+  {
+    this.symbol = symbol;
+    this.foreground = foreground.getRGB();
+    this.background = background.getRGB();
+  }
+
+  public GFXSpec(char symbol, Color background)
+  {
+    this.symbol = symbol;
+    this.foreground = Color.white.getRGB();
+    this.background = background.getRGB();
+  }
+
+  GFXSpec(Color background)
+  {
+    this.symbol = ' ';
+    this.background = background.getRGB();
+    this.foreground = Color.black.getRGB();
+  }
+
+  public String toString()
+  {
+    return "GFXSpec("+symbol+", "+new Color(foreground,false)+", "+new Color(background,false)+")";
+  }
+  
+  public static GFXSpec of(char symbol, Color fg, Color bg)
+  {
+    return new GFXSpec(symbol, fg, bg);
+  }
 }

@@ -1,5 +1,7 @@
 package jack.esolang.cellular.rules;
 
+import java.util.function.Predicate;
+
 import jack.esolang.cellular.Automaton;
 import jack.esolang.cellular.Cell;
 
@@ -12,10 +14,8 @@ public class ConstantCondition implements Condition
 		this.value = value;
 	}
 	
-	public boolean evaluate(Cell cell)
-	{
-		return value;
-	}
+	@Override
+	public Predicate<Cell> compile() { return c -> value; }
 	
 	public void solveReferences(Automaton a) { }
 	
