@@ -6,7 +6,6 @@ import java.util.*;
 import com.github.jakz.esolang.Console;
 import com.github.jakz.esolang.cellular.*;
 import com.github.jakz.esolang.cellular.gui.MainFrame;
-import com.github.jakz.esolang.cellular.parser.*;
 
 public class AutomataRepository
 {
